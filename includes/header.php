@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 ob_start();
-// include("../Auth/auth.php");
+include("../Auth/auth.php");
 
 // Time-based greeting
 $hour = date('H');

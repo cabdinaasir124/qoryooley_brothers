@@ -49,6 +49,7 @@
     <script src="../js/profile.js"></script>
     <script src="../js/class.js"></script>
     <script src="../js/subject.js"></script>
+    <script src="../js/c_schedule.js"></script>
 
     <script>
   const academic_year_id = "<?= $academic_year_id ?>";

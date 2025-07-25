@@ -71,7 +71,7 @@
                     <div class="collapse" id="sidebarSubjects">
                         <ul class="nav-second-level">
                             <li><a href="../Admin/subjects.php">Formal Subjects</a></li>
-                            <li><a href="subject-categories.html">Subject Categories</a></li>
+                            <!-- <li><a href="subject-categories.html">Subject Categories</a></li> -->
                         </ul>
                     </div>
                 </li>
@@ -83,8 +83,8 @@
                     <div class="collapse" id="sidebarClasses">
                         <ul class="nav-second-level">
                             <li><a href="../Admin/class_list.php">Class List</a></li>
-                            <li><a href="add-class.html">Add Class</a></li>
-                            <li><a href="class-schedule.html">Class Schedule</a></li>
+                            <!-- <li><a href="add-class.html">Add Class</a></li> -->
+                            <li><a href="../Admin/c_schedule.php">Class Schedule</a></li>
                         </ul>
                     </div>
                 </li>
