@@ -70,7 +70,7 @@
                     </a>
                     <div class="collapse" id="sidebarSubjects">
                         <ul class="nav-second-level">
-                            <li><a href="subjects.html">Formal Subjects</a></li>
+                            <li><a href="../Admin/subjects.php">Formal Subjects</a></li>
                             <li><a href="subject-categories.html">Subject Categories</a></li>
                         </ul>
                     </div>
@@ -115,6 +115,7 @@
                         <ul class="nav-second-level">
                             <li><a href="hifz.html">Hifz Progress</a></li>
                             <li><a href="tajweed.html">Tajweed Records</a></li>
+                            <li><a href="teacher-halaqa-schedule.html"></i> <span> Halaqa Schedule </span></a></li>
                             <li><a href="quranic-subjects.html">Quranic Subjects</a></li>
                             <li><a href="quranic-teachers.html">Quranic Teachers</a></li>
                         </ul>

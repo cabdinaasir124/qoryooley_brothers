@@ -340,7 +340,7 @@
 
                                                             <div class="col-md-6">
                                                             <label>Old Password</label>
-                                                            <input type="password" name="old_password" class="form-control mb-3">
+                                                            <input type="password" class="form-control" name="password" autocomplete="new-password">
 
                                                             <label>New Password</label>
                                                             <input type="password" name="new_password" class="form-control mb-3">

@@ -15,6 +15,9 @@ if ($hour >= 5 && $hour < 12) {
 }
 
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
+
+
+
 ?>
 
 
@@ -34,6 +37,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <h5 class="mb-0">Welcome Back <?php echo htmlspecialchars($username); ?></h5>
     </div>
 </div>
+
 
 <!-- Start Row -->
 <div class="row">
@@ -152,7 +156,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0">Project Statistics</h5>
+<h5 class="card-title mb-0">Student Enrollment Overview</h5>
+<div id="school-quran-statistics" class="apex-charts"></div>
                                     </div>
                                 </div>
 
@@ -167,7 +172,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0">To-Do List</h5>
+<h5 class="card-title mb-0">Upcoming Events & Tasks</h5>
                                     </div>
                                 </div>
 
@@ -182,8 +187,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                                 <div class="flex-fill w-100">
                                                     <div class="d-flex align-items-start justify-content-between gap-1">
                                                         <div>
-                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Design new marketing campaign</h6>
-                                                            <p class="text-muted mb-0 fs-13">November 29, 2024</p>
+                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Prepare Midterm Exam Papers</h6>
+                                                            <p class="text-muted mb-0 fs-13">August 15, 2025</p>
+
                                                         </div>
                                                         <button class="btn btn-light btn-sm border">Edit</button>
                                                     </div>
@@ -191,92 +197,91 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                             </div>
                                         </li>
 
-                                        <li>
-                                            <div class="d-flex mb-2 pb-1">
-                                                <div class="form-check me-2">
-                                                    <input type="checkbox" class="form-check-input" checked="">
-                                                </div>
-                                                <div class="flex-fill w-100">
-                                                    <div class="d-flex align-items-start justify-content-between gap-1">
-                                                        <div>
-                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Update website UI</h6>
-                                                            <p class="text-muted mb-0 fs-13">November 28, 2024</p>
-                                                        </div>
-                                                        <button class="btn btn-light btn-sm border">Edit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
+                                       <li>
+    <div class="d-flex mb-2 pb-1">
+        <div class="form-check me-2">
+            <input type="checkbox" class="form-check-input">
+        </div>
+        <div class="flex-fill w-100">
+            <div class="d-flex align-items-start justify-content-between gap-1">
+                <div>
+                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Prepare Exam Timetable</h6>
+                    <p class="text-muted mb-0 fs-13">August 5, 2025</p>
+                </div>
+                <button class="btn btn-light btn-sm border">Edit</button>
+            </div>
+        </div>
+    </div>
+</li>
 
-                                        <li>
-                                            <div class="d-flex mb-2 pb-1">
-                                                <div class="form-check me-2">
-                                                    <input type="checkbox" class="form-check-input">
-                                                </div>
-                                                <div class="flex-fill w-100">
-                                                    <div class="d-flex align-items-start justify-content-between gap-1">
-                                                        <div>
-                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Up with vendor invoices</h6>
-                                                            <p class="text-muted mb-0 fs-13">December 1, 2024</p>
-                                                        </div>
-                                                        <button class="btn btn-light btn-sm border">Edit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
+<li>
+    <div class="d-flex mb-2 pb-1">
+        <div class="form-check me-2">
+            <input type="checkbox" class="form-check-input" checked="">
+        </div>
+        <div class="flex-fill w-100">
+            <div class="d-flex align-items-start justify-content-between gap-1">
+                <div>
+                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Update Student Attendance</h6>
+                    <p class="text-muted mb-0 fs-13">July 22, 2025</p>
+                </div>
+                <button class="btn btn-light btn-sm border">Edit</button>
+            </div>
+        </div>
+    </div>
+</li>
 
-                                        <li>
-                                            <div class="d-flex mb-2 pb-1">
-                                                <div class="mb-3 form-check  me-2"> 
-                                                    <input type="checkbox" class="form-check-input" checked=""> 
-                                                </div>
-                                                <div class="flex-fill w-100">
-                                                    <div class="d-flex align-items-start justify-content-between gap-1">
-                                                        <div> 
-                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Sales Accounting</h6> 
-                                                            <p class="text-muted mb-0 fs-13">December 5, 2024</p>
-                                                        </div>
-                                                        <button class="btn btn-light btn-sm border">Edit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
+<li>
+    <div class="d-flex mb-2 pb-1">
+        <div class="form-check me-2">
+            <input type="checkbox" class="form-check-input">
+        </div>
+        <div class="flex-fill w-100">
+            <div class="d-flex align-items-start justify-content-between gap-1">
+                <div>
+                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Review Hifz Progress Reports</h6>
+                    <p class="text-muted mb-0 fs-13">July 25, 2025</p>
+                </div>
+                <button class="btn btn-light btn-sm border">Edit</button>
+            </div>
+        </div>
+    </div>
+</li>
 
-                                        <li>
-                                            <div class="d-flex mb-2 pb-1">
-                                                <div class="mb-3 form-check  me-2"> 
-                                                    <input type="checkbox" class="form-check-input">
-                                                </div>
-                                                <div class="flex-fill w-100">
-                                                    <div class="d-flex align-items-start justify-content-between gap-1">
-                                                        <div> 
-                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Update User Database</h6>
-                                                            <p class="text-muted mb-0 fs-13">December 6, 2024</p>
-                                                        </div>
-                                                        <button class="btn btn-light btn-sm border">Edit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        
-                                        <li>
-                                            <div class="d-flex mb-0 pb-0">
-                                                <div class="mb-3 form-check me-2"> 
-                                                    <input type="checkbox" class="form-check-input" checked="">
-                                                </div>
-                                                <div class="flex-fill w-100">
-                                                    <div class="d-flex align-items-start justify-content-between gap-1">
-                                                        <div> 
-                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Monthly sales report</h6>
-                                                            <p class="text-muted mb-0 fs-13">December 8, 2024</p>
-                                                        </div>
+<li>
+    <div class="d-flex mb-2 pb-1">
+        <div class="form-check me-2">
+            <input type="checkbox" class="form-check-input">
+        </div>
+        <div class="flex-fill w-100">
+            <div class="d-flex align-items-start justify-content-between gap-1">
+                <div>
+                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Assign Quranic Subjects</h6>
+                    <p class="text-muted mb-0 fs-13">August 1, 2025</p>
+                </div>
+                <button class="btn btn-light btn-sm border">Edit</button>
+            </div>
+        </div>
+    </div>
+</li>
 
-                                                        <button class="btn btn-light btn-sm border">Edit</button>
+<li>
+    <div class="d-flex mb-2 pb-1">
+        <div class="form-check me-2">
+            <input type="checkbox" class="form-check-input" checked="">
+        </div>
+        <div class="flex-fill w-100">
+            <div class="d-flex align-items-start justify-content-between gap-1">
+                <div>
+                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Upload Exam Results</h6>
+                    <p class="text-muted mb-0 fs-13">July 20, 2025</p>
+                </div>
+                <button class="btn btn-light btn-sm border">Edit</button>
+            </div>
+        </div>
+    </div>
+</li>
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
                                         
                                     </ul>
                                 </div>
@@ -286,740 +291,648 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                     </div>
                     <!-- End Project Statistics -->
 
-                    <!-- Start Project Categories, Project Statistics, Task Overview -->
-                    <div class="row">
+                    <!-- Start School and Qur'an System Overview -->
+<div class="row">
 
-                        <div class="col-md-6 col-xl-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0">Project Categories</h5>
-                                    </div>
-                                </div>
+    <!-- School Categories & Statistics -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title mb-0">School Categories</h5>
+                </div>
+            </div>
 
-                                <div class="card-body">
-                                    <div class="row align-items-center">
+            <div class="card-body">
+                <div class="row align-items-center">
 
-                                        <div class="col align-items-center">
-                                            <div id="project-categories" class="apex-charts"></div>
-                                        </div>
+                    <div class="col align-items-center">
+                        <div id="project-categories" class="apex-charts"></div>
+                    </div>
 
-                                        <div class="col">
-                                            <div class="d-flex justify-content-between align-items-center p-1">
-                                                <div>
-                                                    <i class="mdi mdi-circle fs-12 align-middle me-1 text-success"></i>
-                                                    <span class="align-middle fw-semibold">UI Project</span>
-                                                </div>
-                                                <span class="fw-medium text-muted float-end">
-                                                    <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                                    12.48%
-                                                </span>
-                                            </div>
-
-                                            <div class="d-flex justify-content-between align-items-center p-1">
-                                                <div>
-                                                    <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: #522c8f;"></i>
-                                                    <span class="align-middle fw-semibold">Web Projects</span>
-                                                </div>
-                                                <span class="fw-medium text-muted float-end">
-                                                    <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                                    15.23%
-                                                </span>
-                                            </div>
-
-                                            <div class="d-flex justify-content-between align-items-center p-1">
-                                                <div>
-                                                    <i class="mdi mdi-circle fs-12 align-middle me-1 text-warning"></i>
-                                                    <span class="align-middle fw-semibold">Mobile Project</span>
-                                                </div>
-                                                <span class="fw-medium text-muted float-end">
-                                                    <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                                    19.58%
-                                                </span>
-                                            </div>
-
-                                            <div class="d-flex justify-content-between align-items-center p-1">
-                                                <div>
-                                                    <i class="mdi mdi-circle fs-12 align-middle me-1"
-                                                        style="color: #01D4FF"></i>
-                                                    <span class="align-middle fw-semibold">Marketing Project</span>
-                                                </div>
-                                                <span class="fw-medium text-muted float-end">
-                                                    <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                                    14.15%
-                                                </span>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row row-cols-12 border border-dashed border-1 rounded-2 mt-2">
-                                        <div class="col">
-                                            <div class="p-2 border-end border-inline-end-dashed">
-                                                <p class="mb-1 text-muted text-start">Design Categories</p>
-                                                <div class="d-flex align-items-center mt-2 justify-content-between me-2">
-                                                    <h3 class="mb-0 fs-22 text-dark me-3">1,478</h3>
-                                                    <span class="text-primary fs-14"><i class="mdi mdi-trending-up fs-14"></i> 12.5%</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-
-                                        <div class="col">
-                                            <div class="p-2 ps-0">
-                                                <p class="mb-1 text-muted text-start">Develop Categories</p>
-                                                <div class="d-flex align-items-center mt-2 justify-content-between">
-                                                    <h3 class="mb-0 fs-22 text-dark me-3">1,978</h3>
-                                                    <span class="text-primary fs-14"><i class="mdi mdi-trending-up fs-14"></i> 10%</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
+                    <div class="col">
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <div>
+                                <i class="mdi mdi-circle fs-12 align-middle me-1 text-success"></i>
+                                <span class="align-middle fw-semibold">Qur’an Classes</span>
                             </div>
+                            <span class="fw-medium text-muted float-end">
+                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
+                                18.5%
+                            </span>
                         </div>
 
-                        <div class="col-md-6 col-xl-5">
-                            <div class="card">
-
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0">Project Budget</h5>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-                                    <div id="project_budget" class="apex-charts"></div>
-                                </div>
-
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <div>
+                                <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: #522c8f;"></i>
+                                <span class="align-middle fw-semibold">Primary School</span>
                             </div>
+                            <span class="fw-medium text-muted float-end">
+                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
+                                21.3%
+                            </span>
                         </div>
 
-                        <div class="col-xxl-3">
-                            <div class="card">
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <div>
+                                <i class="mdi mdi-circle fs-12 align-middle me-1 text-warning"></i>
+                                <span class="align-middle fw-semibold">Secondary School</span>
+                            </div>
+                            <span class="fw-medium text-muted float-end">
+                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
+                                16.9%
+                            </span>
+                        </div>
 
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0">Task Overview</h5>
-                                    </div>
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <div>
+                                <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: #01D4FF;"></i>
+                                <span class="align-middle fw-semibold">Evening Classes</span>
+                            </div>
+                            <span class="fw-medium text-muted float-end">
+                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
+                                10.4%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-cols-12 border border-dashed border-1 rounded-2 mt-2">
+                    <div class="col">
+                        <div class="p-2 border-end border-inline-end-dashed">
+                            <p class="mb-1 text-muted text-start">Students Enrolled</p>
+                            <div class="d-flex align-items-center mt-2 justify-content-between me-2">
+                                <h3 class="mb-0 fs-22 text-dark me-3">1,150</h3>
+                                <span class="text-primary fs-14"><i class="mdi mdi-trending-up fs-14"></i> 7.2%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="p-2 ps-0">
+                            <p class="mb-1 text-muted text-start">Active Teachers</p>
+                            <div class="d-flex align-items-center mt-2 justify-content-between">
+                                <h3 class="mb-0 fs-22 text-dark me-3">42</h3>
+                                <span class="text-primary fs-14"><i class="mdi mdi-trending-up fs-14"></i> 5.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- School Budget -->
+    <div class="col-md-6 col-xl-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title mb-0">Monthly Budget</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="project_budget" class="apex-charts"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Overview -->
+    <div class="col-xxl-3">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title mb-0">Task Overview</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush list-group-no-gutters">
+
+                    <!-- Example Tasks -->
+                    <li class="list-group-item px-0 pt-0">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="flex-shrink-0">
+                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
+                                    📚
+                                </span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 text-dark fs-15">Book Purchase</h6>
+                                <p class="fs-13 text-muted mb-0">Library & Qur’an books</p>
+                            </div>
+                            <div class="ms-auto text-end">
+                                <span class="h6 mb-0 fw-semibold text-danger">-$220</span>
+                                <span class="d-block text-muted fs-13">July 10, 2024</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item px-0">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="flex-shrink-0">
+                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
+                                    👨‍🏫
+                                </span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 text-dark fs-15">Teacher Salary</h6>
+                                <p class="fs-13 text-muted mb-0">Monthly payout</p>
+                            </div>
+                            <div class="ms-auto text-end">
+                                <span class="h6 mb-0 fw-semibold text-danger">-$1,250</span>
+                                <span class="d-block text-muted fs-13">July 1, 2024</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item px-0">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="flex-shrink-0">
+                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
+                                    💰
+                                </span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 text-dark fs-15">Student Fees</h6>
+                                <p class="fs-13 text-muted mb-0">Income</p>
+                            </div>
+                            <div class="ms-auto text-end">
+                                <span class="h6 mb-0 fw-semibold text-success">+$3,600</span>
+                                <span class="d-block text-muted fs-13">July 5, 2024</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item px-0 pb-0">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="flex-shrink-0">
+                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
+                                    🧾
+                                </span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 text-dark fs-15">Maintenance</h6>
+                                <p class="fs-13 text-muted mb-0">Repairs & utilities</p>
+                            </div>
+                            <div class="ms-auto text-end">
+                                <span class="h6 mb-0 fw-semibold text-danger">-$480</span>
+                                <span class="d-block text-muted fs-13">July 6, 2024</span>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- End School and Qur'an System Overview -->
+
+
+        <!-- Start Projects Summary -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card overflow-hidden">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title mb-0">Projects Summary</h5>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-traffic mb-0">
+
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Project</th>
+                                        <th>Tasks</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Due Date</th>
+                                        <th>Team</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-dark">1</a>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 fw-medium fs-14">Update the API</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">101</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar  bg-primary" style="width: 25%">
+                                                </div>
+                                            </div>
+                                            <div class="ms-2">25%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary">In
+                                            Progress</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">14 November 2024</p>
+                                    </td>
+                                    <td class="">
+                                        <div class="avatar-group avatar-list-stack">
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-12.jpg"
+                                                    alt="Dianna Smiley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-4.jpg"
+                                                    alt="Daniela Dewitt">
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <a aria-label="anchor"
+                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                        </a>
+                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-dark">2</a>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 fw-medium fs-14">Release v1.2-Beta</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">124</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
+                                                aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar  bg-primary" style="width: 85%">
+                                                </div>
+                                            </div>
+                                            <div class="ms-2">85%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary">In
+                                            Progress</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">16 November 2024</p>
+                                    </td>
+                                    <td class="">
+                                        <div class="avatar-group avatar-list-stack">
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-12.jpg"
+                                                    alt="Dianna Smiley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-4.jpg"
+                                                    alt="Daniela Dewitt">
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <a aria-label="anchor"
+                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                        </a>
+                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-dark">3</a>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 fw-medium fs-14"> Landing Design </p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">74</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
+                                                aria-valuenow="47" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar  bg-primary" style="width: 47%">
+                                                </div>
+                                            </div>
+                                            <div class="ms-2">47%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary">In
+                                            Progress</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">18 November 2024</p>
+                                    </td>
+                                    <td class="">
+                                        <div class="avatar-group avatar-list-stack">
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-12.jpg"
+                                                    alt="Dianna Smiley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-4.jpg"
+                                                    alt="Daniela Dewitt">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a aria-label="anchor"
+                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                        </a>
+                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-dark">4</a>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 fw-medium fs-14"> Designing New Template</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">08</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
+                                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar  bg-primary" style="width: 0%">
+                                                </div>
+                                            </div>
+                                            <div class="ms-2">0%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-danger-subtle text-danger">Pending</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">20 November 2024</p>
+                                    </td>
+                                    <td class="">
+                                        <div class="avatar-group avatar-list-stack">
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-12.jpg"
+                                                    alt="Dianna Smiley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-4.jpg"
+                                                    alt="Daniela Dewitt">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a aria-label="anchor"
+                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                        </a>
+                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-dark">5</a>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 fw-medium fs-14">Plan design offsite</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">52</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
+                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar  bg-primary" style="width: 100%">
+                                                </div>
+                                            </div>
+                                            <div class="ms-2">100%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success-subtle text-success">Completed</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">25 November 2024</p>
+                                    </td>
+                                    <td class="">
+                                        <div class="avatar-group avatar-list-stack">
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-12.jpg"
+                                                    alt="Dianna Smiley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-4.jpg"
+                                                    alt="Daniela Dewitt">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a aria-label="anchor"
+                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                        </a>
+                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-dark">6</a>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 fw-medium fs-14">Home Page</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">45</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
+                                                aria-valuenow="49" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar  bg-primary" style="width: 49%">
+                                                </div>
+                                            </div>
+                                            <div class="ms-2">49%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary">In
+                                            Progress</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">11 December 2024</p>
+                                    </td>
+                                    <td class="">
+                                        <div class="avatar-group avatar-list-stack">
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-12.jpg"
+                                                    alt="Dianna Smiley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
+                                            </a>
+                                            <a href="#">
+                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
+                                                    src="../assets/images/users/user-4.jpg"
+                                                    alt="Daniela Dewitt">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a aria-label="anchor"
+                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                        </a>
+                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
+                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card-footer py-0 border-top">
+                        <div class="row align-items-center">
+                            <div class="col-sm">
+                                <div class="text-block text-center text-sm-start">
+                                    <span class="fw-medium">1 of 3</span>
                                 </div>
-
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush list-group-no-gutters">
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item px-0 pt-0">
-                                            <div class="d-flex align-items-center gap-3">
-
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <div class="align-content-center text-center rounded-3">
-                                                        <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"><path fill="#060707" fill-rule="evenodd" d="M10.512 4.43a.75.75 0 0 0-.081 1.058L16.012 12l-5.581 6.512a.75.75 0 1 0 1.138.976l6-7a.75.75 0 0 0 0-.976l-6-7a.75.75 0 0 0-1.057-.081" clip-rule="evenodd"/><path fill="#060707" d="M6.25 5a.75.75 0 0 1 1.32-.488l6 7a.75.75 0 0 1 0 .976l-6 7A.75.75 0 0 1 6.25 19z"/></svg>
-                                                        </span>
-                                                    </div>
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="align-content-center">
-                                                    <h6 class="mb-1 text-dark fs-15">Google Ads</h6>
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="fs-13 text-muted mb-0 text-nowrap text-truncate">Payment</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="ms-auto align-content-center text-end">
-                                                    <span class="h6 mb-0 fw-semibold text-danger">-$890</span>
-                                                    <span class="d-block text-muted fs-13">May 19, 2024</span>
-                                                </div>
-
-                                            </div>
+                            </div>
+                            <div class="col-sm-auto mt-3 mt-sm-0">
+                                <div class="pagination gap-2 justify-content-center py-3 ps-0 pe-3">
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled">
+                                            <a class="page-link me-2 rounded-2" href="javascript:void(0);">
+                                                Prev </a>
                                         </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item px-0">
-                                            <div class="d-flex align-items-center gap-3">
-
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <div class="align-content-center text-center rounded-3">
-                                                        <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"><path fill="#060707" fill-rule="evenodd" d="M23 12c0-1.035-.53-2.07-1.591-2.647L8.597 2.385C6.534 1.264 4 2.724 4 5.033V12z" clip-rule="evenodd"/><path fill="#060707" d="m8.597 21.615l12.812-6.968A2.99 2.99 0 0 0 23 12H4v6.967c0 2.31 2.534 3.769 4.597 2.648" opacity="0.5"/></svg>
-                                                        </span>
-                                                    </div>
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="align-content-center">
-                                                    <h6 class="mb-1 text-dark fs-15">Digital Marketing</h6>
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="fs-13 text-muted mb-0 text-nowrap text-truncate">Expense</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="ms-auto align-content-center text-end">
-                                                    <span class="h6 mb-0 fw-semibold text-danger">-$504</span>
-                                                    <span class="d-block text-muted fs-13">May 19, 2024</span>
-                                                </div>
-
-                                            </div>
+                                        <li class="page-item active">
+                                            <a class="page-link rounded-2 me-2" href="#" data-i="1"
+                                                data-page="5">1</a>
                                         </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item px-0 pb-0">
-                                            <div class="d-flex align-items-center gap-3">
-
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <div class="align-content-center text-center rounded-3">
-                                                        <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"><path fill="#060707" fill-rule="evenodd" d="M5.172 3.172C4 4.343 4 6.229 4 10v4c0 3.771 0 5.657 1.172 6.828S8.229 22 12 22s5.657 0 6.828-1.172S20 17.771 20 14v-4c0-3.771 0-5.657-1.172-6.828S15.771 2 12 2S6.343 2 5.172 3.172M9 4.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5zM12 19a2 2 0 1 0 0-4a2 2 0 0 0 0 4" clip-rule="evenodd"/></svg>
-                                                        </span>
-                                                    </div>
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="align-content-center">
-                                                    <h6 class="mb-1 text-dark fs-15">Mobile Development</h6>
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="fs-13 text-muted mb-0 text-nowrap text-truncate">Income</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="ms-auto align-content-center text-end">
-                                                    <span class="h6 mb-0 fw-semibold text-success">+$700</span>
-                                                    <span class="d-block text-muted fs-13">May 19, 2024</span>
-                                                </div>
-
-                                            </div>
+                                        <li class="page-item">
+                                            <a class="page-link me-2 rounded-2" href="#" data-i="2"
+                                                data-page="5">2</a>
                                         </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item px-0">
-                                            <div class="d-flex align-items-center gap-3">
-
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <div class="align-content-center text-center rounded-3">
-                                                        <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"><g fill="#060707" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.75a.75.75 0 0 1 .75.75v.75h.75a.75.75 0 0 1 0 1.5h-.75v.75a.75.75 0 0 1-1.5 0v-.75h-.75a.75.75 0 0 1 0-1.5h.75v-.75a.75.75 0 0 1 .75-.75"/><path d="M11.948 1.25c-.899 0-1.648 0-2.242.08c-.628.084-1.195.27-1.65.725c-.456.456-.642 1.023-.726 1.65c-.08.595-.08 1.345-.08 2.243v.078c-2.021.066-3.235.302-4.078 1.146C2 8.343 2 10.229 2 14s0 5.657 1.172 6.828S6.229 22 10 22h4c3.771 0 5.657 0 6.828-1.172S22 17.771 22 14s0-5.657-1.172-6.828c-.843-.844-2.057-1.08-4.078-1.146v-.078c0-.898 0-1.648-.08-2.242c-.084-.628-.27-1.195-.726-1.65c-.455-.456-1.022-.642-1.65-.726c-.594-.08-1.344-.08-2.242-.08zm3.302 4.752V6c0-.964-.002-1.612-.066-2.095c-.063-.461-.17-.659-.3-.789s-.328-.237-.79-.3c-.482-.064-1.13-.066-2.094-.066s-1.612.002-2.095.067c-.461.062-.659.169-.789.3s-.237.327-.3.788C8.753 4.388 8.75 5.036 8.75 6v.002Q9.337 6 10 6h4q.662 0 1.25.002M16 14a4 4 0 1 1-8 0a4 4 0 0 1 8 0"/></g></svg>
-                                                        </span>
-                                                    </div>
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="align-content-center">
-                                                    <h6 class="mb-1 text-dark fs-15">Health Track</h6>
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="fs-13 text-muted mb-0 text-nowrap text-truncate">Payment</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="ms-auto align-content-center text-end">
-                                                    <span class="h6 mb-0 fw-semibold text-danger">+$700</span>
-                                                    <span class="d-block text-muted fs-13">May 19, 2024</span>
-                                                </div>
-
-                                            </div>
+                                        <li class="page-item">
+                                            <a class="page-link text-primary rounded-2"
+                                                href="javascript:void(0);"> next </a>
                                         </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item px-0">
-                                            <div class="d-flex align-items-center gap-3">
-
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <div class="align-content-center text-center rounded-3">
-                                                        <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"><path fill="#060707" fill-rule="evenodd" d="M2.028 11.25A10 10 0 0 1 12 2c-.83 0-1.57.364-2.18.921c-.605.554-1.116 1.328-1.53 2.242c-.416.92-.74 1.996-.959 3.163a20 20 0 0 0-.318 2.924zm0 1.5h4.985c.036 1.002.143 1.988.318 2.924c.22 1.167.543 2.243.959 3.163c.414.914.925 1.688 1.53 2.242c.61.557 1.35.921 2.18.921c-5.27 0-9.589-4.077-9.972-9.25" clip-rule="evenodd"/><path fill="#060707" d="M12 3.395c-.275 0-.63.117-1.043.495c-.416.381-.833.978-1.201 1.791c-.366.808-.663 1.783-.867 2.873c-.16.858-.26 1.768-.296 2.696h6.814a18.5 18.5 0 0 0-.296-2.696c-.204-1.09-.5-2.065-.867-2.873c-.368-.813-.784-1.41-1.2-1.79c-.414-.379-.769-.496-1.044-.496M8.889 15.446c.204 1.09.501 2.065.867 2.873c.368.813.785 1.41 1.2 1.79c.414.379.77.496 1.044.496c.275 0 .63-.117 1.043-.495c.417-.381.833-.978 1.201-1.791c.366-.808.663-1.783.867-2.873c.161-.858.261-1.768.296-2.696H8.593c.035.928.135 1.838.296 2.696"/><path fill="#060707" d="M12 2c.831 0 1.57.364 2.18.921c.605.554 1.117 1.328 1.53 2.242c.417.92.74 1.996.959 3.163c.175.936.282 1.922.318 2.924h4.985A10 10 0 0 0 12 2m4.669 13.674c-.219 1.167-.542 2.243-.959 3.163c-.413.914-.925 1.688-1.53 2.242c-.61.557-1.349.921-2.18.921c5.27 0 9.589-4.077 9.972-9.25h-4.985a20 20 0 0 1-.318 2.924"/></svg>
-                                                        </span>
-                                                    </div>
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="align-content-center">
-                                                    <h6 class="mb-1 text-dark fs-15">Web Development</h6>
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="fs-13 text-muted mb-0 text-nowrap text-truncate">Income</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="ms-auto align-content-center text-end">
-                                                    <span class="h6 mb-0 fw-semibold text-success">+$700</span>
-                                                    <span class="d-block text-muted fs-13">May 19, 2024</span>
-                                                </div>
-
-                                            </div>
-                                        </li>
-                                        <!-- End List Item -->
-
                                     </ul>
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                    <!-- End Project Categories, Project Statistics, Task Overview -->
-
-                    <!-- Start Projects Summary -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card overflow-hidden">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0">Projects Summary</h5>
-                                    </div>
-                                </div>
-
-                                <div class="card-body p-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-traffic mb-0">
-
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Project</th>
-                                                    <th>Tasks</th>
-                                                    <th>Progress</th>
-                                                    <th>Status</th>
-                                                    <th>Due Date</th>
-                                                    <th>Team</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tr>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="text-dark">1</a>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 fw-medium fs-14">Update the API</p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">101</p>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                            <div class="progress-bar  bg-primary" style="width: 25%">
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-2">25%</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-primary-subtle text-primary">In
-                                                        Progress</span>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">14 November 2024</p>
-                                                </td>
-                                                <td class="">
-                                                    <div class="avatar-group avatar-list-stack">
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-12.jpg"
-                                                                alt="Dianna Smiley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-4.jpg"
-                                                                alt="Daniela Dewitt">
-                                                        </a>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <a aria-label="anchor"
-                                                        class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                    </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="text-dark">2</a>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 fw-medium fs-14">Release v1.2-Beta</p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">124</p>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                            aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
-                                                            <div class="progress-bar  bg-primary" style="width: 85%">
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-2">85%</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-primary-subtle text-primary">In
-                                                        Progress</span>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">16 November 2024</p>
-                                                </td>
-                                                <td class="">
-                                                    <div class="avatar-group avatar-list-stack">
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-12.jpg"
-                                                                alt="Dianna Smiley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-4.jpg"
-                                                                alt="Daniela Dewitt">
-                                                        </a>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <a aria-label="anchor"
-                                                        class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                    </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="text-dark">3</a>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 fw-medium fs-14"> Landing Design </p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">74</p>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                            aria-valuenow="47" aria-valuemin="0" aria-valuemax="100">
-                                                            <div class="progress-bar  bg-primary" style="width: 47%">
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-2">47%</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-primary-subtle text-primary">In
-                                                        Progress</span>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">18 November 2024</p>
-                                                </td>
-                                                <td class="">
-                                                    <div class="avatar-group avatar-list-stack">
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-12.jpg"
-                                                                alt="Dianna Smiley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-4.jpg"
-                                                                alt="Daniela Dewitt">
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a aria-label="anchor"
-                                                        class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                    </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="text-dark">4</a>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 fw-medium fs-14"> Designing New Template</p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">08</p>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                                            <div class="progress-bar  bg-primary" style="width: 0%">
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-2">0%</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-danger-subtle text-danger">Pending</span>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">20 November 2024</p>
-                                                </td>
-                                                <td class="">
-                                                    <div class="avatar-group avatar-list-stack">
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-12.jpg"
-                                                                alt="Dianna Smiley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-4.jpg"
-                                                                alt="Daniela Dewitt">
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a aria-label="anchor"
-                                                        class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                    </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="text-dark">5</a>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 fw-medium fs-14">Plan design offsite</p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">52</p>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                            <div class="progress-bar  bg-primary" style="width: 100%">
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-2">100%</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Completed</span>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">25 November 2024</p>
-                                                </td>
-                                                <td class="">
-                                                    <div class="avatar-group avatar-list-stack">
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-12.jpg"
-                                                                alt="Dianna Smiley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-4.jpg"
-                                                                alt="Daniela Dewitt">
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a aria-label="anchor"
-                                                        class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                    </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="text-dark">6</a>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 fw-medium fs-14">Home Page</p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">45</p>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                            aria-valuenow="49" aria-valuemin="0" aria-valuemax="100">
-                                                            <div class="progress-bar  bg-primary" style="width: 49%">
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-2">49%</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-primary-subtle text-primary">In
-                                                        Progress</span>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 text-muted">11 December 2024</p>
-                                                </td>
-                                                <td class="">
-                                                    <div class="avatar-group avatar-list-stack">
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-12.jpg"
-                                                                alt="Dianna Smiley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                                        </a>
-                                                        <a href="#">
-                                                            <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                                src="../assets/images/users/user-4.jpg"
-                                                                alt="Daniela Dewitt">
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a aria-label="anchor"
-                                                        class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                    </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                                        data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class="card-footer py-0 border-top">
-                                    <div class="row align-items-center">
-                                        <div class="col-sm">
-                                            <div class="text-block text-center text-sm-start">
-                                                <span class="fw-medium">1 of 3</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-auto mt-3 mt-sm-0">
-                                            <div class="pagination gap-2 justify-content-center py-3 ps-0 pe-3">
-                                                <ul class="pagination mb-0">
-                                                    <li class="page-item disabled">
-                                                        <a class="page-link me-2 rounded-2" href="javascript:void(0);">
-                                                            Prev </a>
-                                                    </li>
-                                                    <li class="page-item active">
-                                                        <a class="page-link rounded-2 me-2" href="#" data-i="1"
-                                                            data-page="5">1</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link me-2 rounded-2" href="#" data-i="2"
-                                                            data-page="5">2</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link text-primary rounded-2"
-                                                            href="javascript:void(0);"> next </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End Projects Summary -->
-
-                </div> <!-- container-fluid -->
-            </div> <!-- content -->
-
-            <!-- Footer Start -->
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col fs-13 text-muted text-center">
-                            &copy; <script>document.write(new Date().getFullYear())</script> - Made with <span class="mdi mdi-heart text-danger"></span> by <a href="#!" class="text-reset fw-semibold">Zoyothemes</a> 
-                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- end Footer -->
+            </div>
+        </div>
+        <!-- End Projects Summary -->
+
+        </div> <!-- container-fluid -->
+    </div> <!-- content -->
+
+            
 
         </div>
         <!-- ============================================================== -->

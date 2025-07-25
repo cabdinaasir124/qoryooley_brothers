@@ -1,14 +1,14 @@
 <?php
 include("../config/conn.php");
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 ob_start();
-include("../Auth/auth.php");
+// include("../Auth/auth.php");
 
-
+// Time-based greeting
 $hour = date('H');
 if ($hour >= 5 && $hour < 12) {
     $greeting = "Good Morning";
@@ -22,11 +22,7 @@ if ($hour >= 5 && $hour < 12) {
 
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
-
-
-
-
-// Check user session
+// Get user profile
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
     $stmt = $conn->prepare("SELECT username, profile_image FROM users WHERE id = ?");
@@ -36,9 +32,46 @@ if (isset($_SESSION['user_id'])) {
     $stmt->bind_result($username, $profile_image);
     $stmt->fetch();
 
-    // If profile image is null or not set, use default image
     if (empty($profile_image)) {
-        $profile_image = "image.png"; // your default image
+        $profile_image = "image.png"; // default profile image
+    }
+}
+
+// Populate academic_years table if not already
+$current_year = date("Y");
+for ($i = 0; $i < 5; $i++) {
+    $start = $current_year + $i;
+    $end = $start + 1;
+    $year_name = "$start/$end";
+
+    // Make the first year current
+    $is_current = ($i === 0) ? 1 : 0;
+
+    $stmt = $conn->prepare("INSERT IGNORE INTO academic_years (year_name, is_current) VALUES (?, ?)");
+    $stmt->bind_param("si", $year_name, $is_current);
+    $stmt->execute();
+}
+
+
+// ✅ Only insert class if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_name'], $_POST['academic_year_id'])) {
+    $class_name = $_POST['class_name'];
+    $academic_year_id = $_POST['academic_year_id'];
+
+    $sql = "INSERT INTO classes (class_name, academic_year_id) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $class_name, $academic_year_id);
+    $stmt->execute();
+}
+
+// ✅ Only run this if `academic_year_id` is passed via GET
+$classes = [];
+if (isset($_GET['academic_year_id'])) {
+    $year_id = $_GET['academic_year_id'];
+    $result = mysqli_query($conn, "SELECT * FROM classes WHERE academic_year_id = $year_id");
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $classes[] = $row;
     }
 }
 ?>
@@ -72,6 +105,14 @@ if (isset($_SESSION['user_id'])) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
+
+        <!-- Datatables css -->
+        <link href="../assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/libs/datatables.net-keytable-bs5/css/keyTable.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/libs/datatables.net-select-bs5/css/select.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+        
 
 
         <style>
@@ -111,6 +152,24 @@ if (isset($_SESSION['user_id'])) {
                     <h5 class="mb-0"><?php echo "$greeting, $username"; ?></h5>
                     </li>
                 </ul>
+
+                <div class="mt-3">
+    <form method="GET" action="">
+        <select class="form-select" name="academic_year_id" required onchange="this.form.submit()">
+            
+            <option disabled selected>-- Select Academic Year --</option>
+            <?php
+            $result = mysqli_query($conn, "SELECT * FROM academic_years ORDER BY year_name ASC");
+            while ($row = mysqli_fetch_assoc($result)) {
+                $selected = (isset($_GET['academic_year_id']) && $_GET['academic_year_id'] == $row['id']) ? "selected" : "";
+                echo "<option value='{$row['id']}' $selected>{$row['year_name']}</option>";
+            }
+            ?>
+        </select>
+    </form>
+</div>
+
+
 
                 <ul class="list-unstyled topnav-menu mb-0 d-flex align-items-center">
                     <li class="d-none d-lg-block">

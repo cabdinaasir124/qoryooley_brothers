@@ -72,7 +72,7 @@
           </div>
           <div class="col-md-6">
             <label class="form-label">Password</label>
-            <input type="password" class="form-control" name="password">
+<input type="password" class="form-control" name="password" autocomplete="new-password">
           </div>
           <div class="col-md-6">
             <label class="form-label">Role</label>
