@@ -51,6 +51,19 @@
                 </li>
 
                 <li>
+                <a href="#sidebarParents" data-bs-toggle="collapse">
+                    <i data-feather="user-check"></i> <span> Parents </span> <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarParents">
+                    <ul class="nav-second-level">
+                        <li><a href="../Admin/parent_list.php">Parent List</a></li>
+                        <!-- <li><a href="../Admin/register-parent.php">Register Parent</a></li> -->
+                    </ul>
+                </div>
+            </li>
+
+
+                <li>
                     <a href="#sidebarTeachers" data-bs-toggle="collapse">
                         <i data-feather="users"></i> <span> Teachers </span> <span class="menu-arrow"></span>
                     </a>

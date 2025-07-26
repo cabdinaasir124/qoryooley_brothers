@@ -17,6 +17,9 @@
     <!-- Widgets Init Js -->
     <script src="../assets/js/pages/projects-dashboard.init.js"></script>
 
+    <script>
+    const academic_year_id = "<?= $academic_year_id ?>";
+    </script>
 
     <!-- Datatables js -->
         <script src="../assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -50,10 +53,12 @@
     <script src="../js/class.js"></script>
     <script src="../js/subject.js"></script>
     <script src="../js/c_schedule.js"></script>
+    <script src="../js/c_schedule.js"></script>
+    <script src="../js/c_schedule.js"></script>
+    <script src="../js/parent_list.js"></script>
+    <script src="../js/student.js"></script>
 
-    <script>
-  const academic_year_id = "<?= $academic_year_id ?>";
-</script>
+    
 
    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

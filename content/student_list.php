@@ -9,7 +9,7 @@
                                 <div class="card mt-3">
                                     <div class="card-header d-flex justify-content-between">
                                         <h5 class="card-title mb-0">student list</h5>
-                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentParentModal">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
                                             <i class="fas fa-plus"></i>&nbsp;Add new student
                                         </button>
                                     </div><!-- end card header -->
@@ -19,26 +19,18 @@
                                         <thead>
                                             <tr>
                                             <th>#</th>
+                                            <th>student ID</th>
                                             <th>Student Name</th>
                                             <th>Class</th>
                                             <th>Parent Name</th>
                                             <th>view more</th>
                                             <th>update</th>
-                                            <th>delete</th>
+                                            <!-- <th>delete</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <!-- Example static row (replace with PHP or JS dynamic later) -->
-                                            <tr>
-                                            <td>1</td>
-                                            <td>Ahmed Ali</td>
-                                            <td>Grade 4</td>
-                                            <td>Abdi Ali</td>
-                                            
-                                                <td><button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> View</button></td>
-                                                <td><button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</button></td>
-                                                <td><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button></td>
-                                            </tr>
+                                           
                                         </tbody>
                                         </table>
 
@@ -50,69 +42,135 @@
             </div>
   </div>
 
-  <!-- Modal: Register Student + Parent -->
-<div class="modal fade" id="studentParentModal" tabindex="-1" aria-labelledby="studentParentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <form id="registerStudentParentForm">
-        <div class="modal-header">
-          <h5 class="modal-title" id="studentParentModalLabel">Register Student and Parent</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Student Registration Modal -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form id="studentForm" method="POST" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Register Student</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body">
-          <h6 class="text-primary mb-3">👨‍👩‍👧 Parent Information</h6>
-          <div class="row mb-3">
+          <div class="row g-3">
+            <!-- Left Column -->
             <div class="col-md-6">
-              <label for="parentName" class="form-label">Parent Name</label>
-              <input type="text" class="form-control" id="parentName" name="parent_name" required>
-            </div>
-            <div class="col-md-6">
-              <label for="parentPhone" class="form-label">Phone</label>
-              <input type="text" class="form-control" id="parentPhone" name="parent_phone" required>
-            </div>
-            <div class="col-md-12">
-              <label for="parentAddress" class="form-label">Address</label>
-              <input type="text" class="form-control" id="parentAddress" name="parent_address">
-            </div>
-          </div>
+              <div class="mb-2">
+                <label for="student_id" class="form-label">Student ID</label>
+                <input type="text" id="student_id" name="student_id" class="form-control" readonly>
+              </div>
 
-          <hr>
+              <div class="mb-2">
+                <label for="full_name" class="form-label">Full Name</label>
+                <input type="text" id="full_name" name="full_name" class="form-control" required>
+              </div>
 
-          <h6 class="text-success mb-3">🎓 Student Information</h6>
-          <div class="row">
+              <div class="mb-2">
+                <label for="gender" class="form-label">Gender</label>
+                <select name="gender" id="gender" class="form-select" required>
+                  <option value="">-- Select --</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+
+              <div class="mb-2">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" name="date_of_birth" id="dob" class="form-control">
+              </div>
+
+              <div class="mb-2">
+                <label for="place_of_birth" class="form-label">Place of Birth</label>
+                <input type="text" name="place_of_birth" id="place_of_birth" class="form-control">
+              </div>
+
+              <div class="mb-2">
+                <label for="address" class="form-label">Address</label>
+                <textarea name="address" id="address" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+
+            <!-- Right Column -->
             <div class="col-md-6">
-              <label for="studentName" class="form-label">Student Name</label>
-              <input type="text" class="form-control" id="studentName" name="student_name" required>
-            </div>
-            <div class="col-md-3">
-              <label for="studentAge" class="form-label">Age</label>
-              <input type="number" class="form-control" id="studentAge" name="student_age" required>
-            </div>
-            <div class="col-md-3">
-              <label for="studentGender" class="form-label">Gender</label>
-              <select class="form-select" id="studentGender" name="student_gender" required>
-                <option value="">Select</option>
-                <option>Male</option>
-                <option>Female</option>
+              <!-- Class Dropdown -->
+            <div class="mb-2">
+              <label for="class_id" class="form-label">Class</label>
+              <select name="class_id" id="class_id" class="form-select" required>
+                <?php
+                  include '../config/conn.php'; // ✅ Make sure this is included
+                  $classes = mysqli_query($conn, "SELECT id, class_name FROM classes ORDER BY class_name ASC");
+                  while ($c = mysqli_fetch_assoc($classes)) {
+                      echo "<option value='{$c['id']}'>{$c['class_name']}</option>";
+                  }
+                ?>
               </select>
             </div>
-            <div class="col-md-6 mt-3">
-              <label for="studentClass" class="form-label">Class</label>
-              <input type="text" class="form-control" id="studentClass" name="student_class">
-            </div>
-            <div class="col-md-6 mt-3">
-              <label for="enrollDate" class="form-label">Enrollment Date</label>
-              <input type="date" class="form-control" id="enrollDate" name="enroll_date">
+              <!-- Academic Year Dropdown -->
+              <div class="mb-2">
+                <label for="academic_year_id" class="form-label">Academic Year</label>
+                <select name="academic_year_id" id="academic_year_id" class="form-select" required>
+                  <?php
+include '../config/conn.php';
+
+$query = "SELECT id, year_name FROM academic_years ORDER BY id ASC";
+$years = mysqli_query($conn, $query);
+
+if (!$years) {
+    echo "<option disabled>Error loading academic years: " . mysqli_error($conn) . "</option>";
+} else {
+    while ($y = mysqli_fetch_assoc($years)) {
+        echo "<option value='{$y['id']}'>{$y['year_name']}</option>";
+    }
+}
+?>
+
+                </select>
+              </div>
+
+              <div class="mb-2">
+                <label for="parent_id" class="form-label">Parent</label>
+                <select name="parent_id" id="parent_id" class="form-select">
+                  <?php
+                    $parents = mysqli_query($conn, "SELECT id, name FROM parents ORDER BY name ASC");
+                    while($p = mysqli_fetch_assoc($parents)){
+                      echo "<option value='{$p['id']}'>{$p['name']}</option>";
+                    }
+                  ?>
+                </select>
+              </div>
+
+              <div class="mb-2">
+                <label for="student_image" class="form-label">Student Image</label>
+                <input type="file" name="student_image" id="student_image" class="form-control">
+              </div>
+
+              <div class="mb-2">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-select">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Graduated">Graduated</option>
+                  <option value="Left">Left</option>
+                </select>
+              </div>
+
+              <div class="mb-2">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea name="notes" id="notes" class="form-control" rows="2"></textarea>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Save Registration</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Add Student</button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
 </div>
+
+
+
