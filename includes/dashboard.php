@@ -55,7 +55,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 </span>
                                 <div>
                                     <p class="mb-2 text-dark fs-15 fw-medium">Total Students</p>
-                                    <h3 class="mb-0 fs-22 text-dark me-3">1,250</h3>
+                                    <h3 class="mb-0 fs-22 text-dark me-3" id="studentCount">Loading...</h3>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mt-3 justify-content-between">
@@ -80,7 +80,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 </span>
                                 <div>
                                     <p class="mb-2 text-dark fs-15 fw-medium">Active Classes</p>
-                                    <h3 class="mb-0 fs-22 text-dark me-3">32</h3>
+                                    <h3 class="mb-0 fs-22 text-dark me-3" id="classCount">Loading...</h3>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mt-3 justify-content-between">

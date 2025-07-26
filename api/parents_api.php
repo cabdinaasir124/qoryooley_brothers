@@ -59,8 +59,29 @@ elseif ($action == 'delete') {
 }
 
 elseif ($action == 'get') {
-  $id = $_GET['id'];
-  $stmt = $conn->query("SELECT * FROM parents WHERE id = $id");
-  echo json_encode($stmt->fetch_assoc());
+    $id = $_GET['id'];
+
+    // Get parent details
+    $stmt = $conn->query("SELECT * FROM parents WHERE id = $id");
+    $parent = $stmt->fetch_assoc();
+
+    // Get children linked to this parent
+    $childrenResult = $conn->query("
+        SELECT full_name 
+        FROM students 
+        WHERE parent_id = $id
+    ");
+
+    $children = [];
+    while ($row = $childrenResult->fetch_assoc()) {
+        $children[] = $row['full_name'];
+    }
+
+    // Add children to the response
+    $parent['children'] = $children;
+
+    echo json_encode($parent);
+    exit;
 }
+
 ?>

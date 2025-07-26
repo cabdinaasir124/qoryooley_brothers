@@ -1,4 +1,9 @@
-  <div class="content-page">
+<?php
+require '../config/conn.php';
+// Get academic year ID from URL
+$academic_year_id = $_GET['academic_year_id'] ?? '';
+?>
+ <div class="content-page">
             <div class="content">
 
                 <!-- Start Content-->
@@ -9,12 +14,25 @@
                                 <div class="card mt-3">
                                     <div class="card-header d-flex justify-content-between">
                                         <h5 class="card-title mb-0">student list</h5>
-                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-                                            <i class="fas fa-plus"></i>&nbsp;Add new student
-                                        </button>
+                                        <button id="btnAddStudent" class="btn btn-primary">
+  <i class="fas fa-plus"></i>&nbsp;Add new student
+</button>
+
                                     </div><!-- end card header -->
 
                                     <div class="card-body">
+                                      <div class="mb-3 d-flex justify-content-end">
+  <select id="classFilter" class="form-select w-100">
+    <option value="">All Classes</option>
+    <?php
+      $classList = mysqli_query($conn, "SELECT id, class_name FROM classes ORDER BY class_name ASC");
+      while ($c = mysqli_fetch_assoc($classList)) {
+          echo "<option value='{$c['class_name']}'>{$c['class_name']}</option>";
+      }
+    ?>
+  </select>
+</div>
+
                                        <table id="studentTable" class="table table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
@@ -24,7 +42,7 @@
                                             <th>Class</th>
                                             <th>Parent Name</th>
                                             <th>view more</th>
-                                            <th>update</th>
+                                            <!-- <th>update</th> -->
                                             <!-- <th>delete</th> -->
                                             </tr>
                                         </thead>
@@ -57,6 +75,9 @@
             <!-- Left Column -->
             <div class="col-md-6">
               <div class="mb-2">
+<input type="hidden" name="academic_year_id" id="academic_year_hidden" value="<?= $academic_year_id ?>">
+<input type="hidden" name="id" id="student_db_id">
+
                 <label for="student_id" class="form-label">Student ID</label>
                 <input type="text" id="student_id" name="student_id" class="form-control" readonly>
               </div>
@@ -169,6 +190,27 @@ if (!$years) {
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+
+
+
+<!-- View Student Modal -->
+<div class="modal fade" id="viewStudentModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Student Details</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="studentInfoTable">
+        <!-- Image and table rows will be injected here -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 

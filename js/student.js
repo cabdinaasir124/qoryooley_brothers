@@ -1,95 +1,235 @@
 $(document).ready(function () {
-    let table;
+  let table;
 
-    // Initialize DataTable
-    function initializeTable() {
-        table = $('#studentTable').DataTable({
-            responsive: true,
-            columns: [
-                { title: "#" },
-                { title: "Student Name" },
-                { title: "Class" },
-                { title: "Parent" },
-                { title: "View" },
-                { title: "Edit" },
-                { title: "Delete" }
-            ]
-        });
+ function initializeTable() {
+  table = $('#studentTable').DataTable({
+    responsive: true,
+    destroy: true,
+    columns: [
+      { title: "#" },
+      { title: "Student ID" },
+      { title: "Full Name" },
+      { title: "Class" },
+      { title: "Parent" },
+      { title: "Actions" }
+    ]
+  });
+
+  // Filter by class
+  $('#classFilter').on('change', function () {
+    const className = $(this).val();
+    if (className) {
+      table.column(3).search('^' + className + '$', true, false).draw();
+    } else {
+      table.column(3).search('').draw();
+    }
+  });
+}
+
+
+  function fetchStudents() {
+  const yearId = getAcademicYearIdFromURL(); // ✅ get from URL instead of a dropdown // get from dropdown
+  const url = yearId 
+    ? `../api/student_api.php?action=fetch&academic_year_id=${yearId}`
+    : `../api/student_api.php?action=fetch`;
+
+  $.getJSON(url, function (data) {
+    table.clear();
+
+    if (!data || data.length === 0) {
+      const rowNode = table.row.add(['', '', '', '', '', '']).draw().node();
+      $(rowNode).html(`<td colspan="6" class="text-center text-muted">No students found</td>`);
+      return;
     }
 
-    // Fetch students and populate table
-    function fetchStudents() {
-        $.getJSON('../api/student_api.php?action=fetch', function (data) {
-            table.clear();
+    data.forEach((row, i) => {
+      table.row.add([
+        i + 1,
+        row.student_id,
+        row.full_name,
+        row.class_name,
+        row.parent_name,
+        `
+        <button class="btn btn-info btn-sm view-btn" data-id="${row.id}"><i class="fas fa-eye"></i></button>
+        <button class="btn btn-warning btn-sm edit-btn" data-id="${row.id}"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-danger btn-sm delete-btn" data-id="${row.student_id}"><i class="fas fa-trash"></i></button>
+        `
+      ]);
+    });
 
-            if (!data || data.length === 0) {
-                const rowNode = table.row.add(['', '', '', '', '', '', '']).draw().node();
-                $(rowNode).html(`<td colspan="7" class="text-center text-muted">No students found</td>`);
-                return;
-            }
+    table.draw();
+  });
+}
 
-            data.forEach((row, i) => {
-                table.row.add([
-                    i + 1,
-                    row.full_name || '',
-                    row.class_name || '',
-                    row.parent_name || '',
-                    `<button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> View</button>`,
-                    `<button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</button>`,
-                    `<button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>`
-                ]);
-            });
 
-            table.draw();
-        });
+  function generateStudentId() {
+    const academicYearId = $('#academic_year_id').val();
+    if (!academicYearId) return;
+
+    $.getJSON(`../api/student_api.php?action=generate_id&academic_year_id=${academicYearId}`, function (res) {
+      if (res.student_id) {
+        $('#student_id').val(res.student_id);
+      } else {
+        alert('Failed to generate student ID');
+      }
+    });
+  }
+
+  // Reset modal for add mode
+  function resetModalForAdd() {
+    $('#studentForm')[0].reset();
+    $('#student_db_id').val('');
+    $('#student_id').prop('readonly', true);
+    generateStudentId();
+
+    $('#addStudentModal .modal-title').text('Register Student');
+    $('#addStudentModal button[type="submit"]').text('Add Student');
+  }
+
+  // When Add New button is clicked
+  $('#btnAddStudent').on('click', function () {
+    resetModalForAdd();
+    $('#addStudentModal').modal('show');
+  });
+
+  // Submit form
+  $('#studentForm').submit(function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const isEdit = $('#student_db_id').val() !== '';
+
+    if (isEdit) {
+      formData.append('id', $('#student_db_id').val());
     }
 
-    // Generate next student ID
-    function generateStudentId() {
-        $.getJSON('../api/student_api.php?action=generate_id', function (res) {
-            $('input[name="student_id"]').val(res.student_id);
-        });
-    }
-
-    // Show modal: generate ID
-    $('#addStudentModal').on('show.bs.modal', function () {
-        generateStudentId();
+    $.ajax({
+      url: `../api/student_api.php?action=${isEdit ? 'update' : 'create'}`,
+      method: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      dataType: 'json',
+      success: function (res) {
+        if (res.status === 'success') {
+          $('#addStudentModal').modal('hide');
+          fetchStudents();
+          Swal.fire({
+            icon: 'success',
+            title: isEdit ? 'Student Updated Successfully!' : 'Student Added Successfully!',
+            showConfirmButton: false,
+            timer: 2000
+          });
+        } else {
+          Swal.fire('Error', res.message, 'error');
+        }
+      },
+      error: function () {
+        Swal.fire('Error', 'Could not connect to server.', 'error');
+      }
     });
+  });
 
-    // Reset form when modal closes
-    $('#addStudentModal').on('hidden.bs.modal', function () {
-        $('#studentForm')[0].reset();
+  // View student details
+  $(document).on('click', '.view-btn', function () {
+    const id = $(this).data('id');
+    $.getJSON(`../api/student_api.php?action=get&id=${id}`, function (data) {
+      let tableRows = '';
+
+      for (const key in data) {
+        if (key === 'student_image') continue;
+        const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        tableRows += `<tr><th class="text-start">${label}:</th><td>${data[key] || '-'}</td></tr>`;
+      }
+
+      const imageHTML = data.student_image
+        ? `<div class="text-center mb-3">
+            <img src="${data.student_image}" class="rounded shadow-sm" style="max-height: 150px;">
+          </div>`
+        : '';
+
+      $('#studentInfoTable').html(`
+        ${imageHTML}
+        <table class="table table-bordered">
+          <tbody>${tableRows}</tbody>
+        </table>
+      `);
+
+      $('#viewStudentModal').modal('show');
     });
+  });
 
-    // Form submission
-    $('#studentForm').submit(function (e) {
-        e.preventDefault();
+  // Delete student
+  $(document).on('click', '.delete-btn', function () {
+    const student_id = $(this).data('id');
 
-        const formData = new FormData(this);
-
-        $.ajax({
-            url: '../api/student_api.php?action=create',
-            method: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            dataType: 'json',
-            success: function (res) {
-                if (res.status === 'success') {
-                    $('#addStudentModal').modal('hide');
-                    fetchStudents();
-                    Swal.fire('Success', 'Student registered successfully!', 'success');
-                } else {
-                    Swal.fire('Error', res.message || 'Something went wrong', 'error');
-                }
-            },
-            error: function () {
-                Swal.fire('Error', 'Failed to connect to server', 'error');
-            }
-        });
+    Swal.fire({
+      title: 'Delete Student?',
+      text: "This action cannot be undone.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.post('../api/student_api.php?action=delete', { student_id }, function (res) {
+          if (res.status === 'deleted') {
+            Swal.fire('Deleted!', 'Student has been deleted.', 'success');
+            fetchStudents();
+          } else {
+            Swal.fire('Error', res.message || 'Failed to delete student.', 'error');
+          }
+        }, 'json');
+      }
     });
+  });
 
-    // Initialize everything on page load
-    initializeTable();
-    fetchStudents();
+  // Edit student
+  $(document).on('click', '.edit-btn', function () {
+    const id = $(this).data('id');
+
+    $.getJSON(`../api/student_api.php?action=get&id=${id}`, function (data) {
+      $('#student_db_id').val(data.id);
+      $('#student_id').val(data.student_id);
+      $('#full_name').val(data.full_name);
+      $('#gender').val(data.gender);
+      $('#dob').val(data.date_of_birth);
+      $('#place_of_birth').val(data.place_of_birth);
+      $('#address').val(data.address);
+      $('#class_id').val(data.class_id);
+      $('#academic_year_id').val(data.academic_year_id);
+      $('#parent_id').val(data.parent_id);
+      $('#status').val(data.status);
+      $('#notes').val(data.notes);
+
+      $('#student_id').prop('readonly', true);
+      $('#addStudentModal .modal-title').text('Edit Student');
+      $('#addStudentModal button[type="submit"]').text('Update Student');
+
+      $('#addStudentModal').modal('show');
+    });
+  });
+
+    
+     function fetchDashboardCounts() {
+  $.getJSON('../api/student_api.php?action=dashboard_counts', function (data) {
+    $('#studentCount').text(data.students);
+    $('#classCount').text(data.classes);
+  });
+}
+
+// Call this on page load
+fetchDashboardCounts();
+
+   function getAcademicYearIdFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('academic_year_id') || '';
+}
+
+    
+  // Initialize everything
+  initializeTable();
+  fetchStudents();
+
 });

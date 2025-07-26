@@ -107,16 +107,32 @@ function fetchParents() {
   });
 
   // Edit Parent
-  $(document).on('click', '.edit-btn', function () {
+  // Edit Parent
+$(document).on('click', '.edit-btn', function () {
     const id = $(this).data('id');
+
     $.getJSON(`../api/parents_api.php?action=get&id=${id}`, function (data) {
-      $('#parent_id').val(data.id);
-      $('#parent_name').val(data.name);
-      $('#parent_phone').val(data.phone);
-      $('#relationship').val(data.relationship_to_student);
-      $('#parentModal').modal('show');
+        $('#parent_id').val(data.id);
+        $('#parent_name').val(data.name);
+        $('#parent_phone').val(data.phone);
+        $('#relationship').val(data.relationship_to_student);
+
+        // Clear and repopulate children list
+        const $list = $('#childrenList');
+        $list.empty();
+
+        if (data.children && data.children.length > 0) {
+            data.children.forEach(child => {
+                $list.append(`<li class="list-group-item">${child}</li>`);
+            });
+        } else {
+            $list.append(`<li class="list-group-item text-muted">No children linked</li>`);
+        }
+
+        $('#parentModal').modal('show');
     });
-  });
+});
+
 
   // Delete Parent
   $(document).on('click', '.delete-btn', function () {
@@ -153,11 +169,13 @@ function fetchParents() {
     });
   });
 
-  // Reset form when modal hidden
   $('#parentModal').on('hidden.bs.modal', function () {
-    $('#parentForm')[0].reset();
-    $('#parent_id').val('');
-  });
+  $('#parentForm')[0].reset();
+  $('#parent_id').val('');
+
+  // Clear the children list so it doesn't show stale data
+  $('#childrenList').html('<li class="list-group-item text-muted">No children linked</li>');
+});
 
   
 
