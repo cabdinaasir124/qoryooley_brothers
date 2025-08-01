@@ -74,6 +74,16 @@ if (isset($_GET['academic_year_id'])) {
         $classes[] = $row;
     }
 }
+
+
+$role = $_SESSION['role'] ?? '';
+$profileLink = '#'; // default fallback
+
+if ($role === 'admin') {
+    $profileLink = '../Admin/profile.php';
+} elseif ($role === 'teacher') {
+    $profileLink = '../teachers/profile.php'; // adjust this path to your student profile page
+}
 ?>
 
 
@@ -114,6 +124,10 @@ if (isset($_GET['academic_year_id'])) {
         <link href="../assets/libs/datatables.net-select-bs5/css/select.bootstrap5.min.css" rel="stylesheet" type="text/css" />
         
 
+        <!-- Toastify CSS + JS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 
         <style>
             .profile-initial {
@@ -132,7 +146,7 @@ if (isset($_GET['academic_year_id'])) {
     </head>
 
     <!-- body start -->
-    <body data-menu-color="light" data-sidebar="default">
+    <body class="sidebar-enable" data-menu-color="light" data-sidebar="default">
 
     <!-- Begin page -->
     <div id="app-layout">
@@ -196,159 +210,63 @@ if (isset($_GET['academic_year_id'])) {
                         </button>
                     </li>
 
+                    <!-- Notification Dropdown + Hidden Role -->
+                        <li class="dropdown notification-list topbar-dropdown">
+                            <input type="hidden" id="userRole" value="<?php echo $_SESSION['role'] ?? 'guest'; ?>">
+
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <i data-feather="bell" class="noti-icon"></i>
+                                <span class="badge bg-danger rounded-circle noti-icon-badge">0</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-lg">
+                                <div class="dropdown-item noti-title">
+                                    <h5 class="m-0">
+                                    <span class="float-end">
+                                    <a href="#" class="text-dark" id="markAllRead"><small>Clear All</small></a>
+                                    </span>
+
+                                        Notification
+                                    </h5>
+                                </div>
+                                <div class="noti-scroll" data-simplebar>
+                                    <!-- Notifications go here -->
+                                </div>
+                            </div>
+                        </li>
+
+
+                    <!-- User Dropdown -->
                     <li class="dropdown notification-list topbar-dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <i data-feather="bell" class="noti-icon"></i>
-                            <span class="badge bg-danger rounded-circle noti-icon-badge">9</span>
+                        <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            <img src="../upload/profile/<?php echo htmlspecialchars($profile_image); ?>" alt="user-image" class="rounded-circle" />
+                            <span class="pro-user-name ms-1">
+                                <?php echo htmlspecialchars($username); ?> <i class="mdi mdi-chevron-down"></i>
+                            </span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end dropdown-lg">
-                            <!-- item-->
-                            <div class="dropdown-item noti-title">
-                                <h5 class="m-0">
-                                    <span class="float-end"><a href="" class="text-dark"><small>Clear All</small></a></span>Notification
-                                </h5>
+                        <div class="dropdown-menu dropdown-menu-end profile-dropdown">
+                            <div class="dropdown-header noti-title">
+                                <h6 class="text-overflow m-0">Welcome !</h6>
                             </div>
 
-                            <div class="noti-scroll" data-simplebar>
-                                <!-- item-->
-                                <a href="javascript:void(0);"
-                                    class="dropdown-item notify-item text-muted link-primary active">
-                                    <div class="notify-icon">
-                                        <img src="../assets/images/users/user-12.jpg" class="img-fluid rounded-circle" alt="" />
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <p class="notify-details">Carl Steadham</p>
-                                        <small class="text-muted">5 min ago</small>
-                                    </div>
-                                    <p class="mb-0 user-msg">
-                                        <small class="fs-14">Completed <span class="text-reset">Improve workflow in Figma</span></small>
-                                    </p>
-                                </a>
+                            <a href="<?= $profileLink; ?>" class="dropdown-item notify-item">
+                                <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
+                                <span>My Account</span>
+                            </a>
 
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
-                                    <div class="notify-icon">
-                                        <img src="../assets/images/users/user-2.jpg" class="img-fluid rounded-circle" alt="" />
-                                    </div>
-                                    <div class="notify-content">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <p class="notify-details">Olivia McGuire</p>
-                                            <small class="text-muted">1 min ago</small>
-                                        </div>
 
-                                        <div class="d-flex mt-2 align-items-center">
-                                            <div class="notify-sub-icon">
-                                                <i class="mdi mdi-download-box text-dark"></i>
-                                            </div>
+                            <a href="auth-lock-screen.php" class="dropdown-item notify-item">
+                                <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
+                                <span>Lock Screen</span>
+                            </a>
 
-                                            <div>
-                                                <p class="notify-details mb-0">dark-themes.zip</p>
-                                                <small class="text-muted">2.4 MB</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
+                            <div class="dropdown-divider"></div>
 
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
-                                    <div class="notify-icon">
-                                        <img src="../assets/images/users/user-3.jpg" class="img-fluid rounded-circle" alt="" />
-                                    </div>
-                                    <div class="notify-content">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <p class="notify-details">Travis Williams</p>
-                                            <small class="text-muted">7 min ago</small>
-                                        </div>
-                                        <p class="noti-mentioned p-2 rounded-2 mb-0 mt-2">
-                                            <span class="text-primary">@Patryk</span> Please make sure that you're....
-                                        </p>
-                                    </div>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
-                                    <div class="notify-icon">
-                                        <img src="../assets/images/users/user-8.jpg" class="img-fluid rounded-circle" alt="" />
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <p class="notify-details">Violette Lasky</p>
-                                        <small class="text-muted">5 min ago</small>
-                                    </div>
-                                    <p class="mb-0 user-msg">
-                                        <small class="fs-14">Completed <span class="text-reset">Create new components</span></small>
-                                    </p>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
-                                    <div class="notify-icon">
-                                        <img src="../assets/images/users/user-5.jpg" class="img-fluid rounded-circle" alt="" />
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <p class="notify-details">Ralph Edwards</p>
-                                        <small class="text-muted">5 min ago</small>
-                                    </div>
-                                    <p class="mb-0 user-msg">
-                                        <small class="fs-14">Completed<span class="text-reset">Improve workflow in React</span></small>
-                                    </p>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
-                                    <div class="notify-icon">
-                                        <img src="../assets/images/users/user-6.jpg" class="img-fluid rounded-circle" alt="" />
-                                    </div>
-                                    <div class="notify-content">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <p class="notify-details">Jocab jones</p>
-                                            <small class="text-muted">7 min ago</small>
-                                        </div>
-                                        <p class="noti-mentioned p-2 rounded-2 mb-0 mt-2">
-                                            <span class="text-reset">@Patryk</span> Please make sure that you're....
-                                        </p>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- All-->
-                            <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">View all
-                                <i class="fe-arrow-right"></i>
+                            <a href="../Auth/logout.php" class="dropdown-item notify-item">
+                                <i class="mdi mdi-location-exit fs-16 align-middle"></i>
+                                <span>Logout</span>
                             </a>
                         </div>
                     </li>
-
-                    <!-- User Dropdown -->
-                    <!-- User Dropdown -->
-<li class="dropdown notification-list topbar-dropdown">
-    <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-        <img src="../upload/profile/<?php echo htmlspecialchars($profile_image); ?>" alt="user-image" class="rounded-circle" />
-        <span class="pro-user-name ms-1">
-            <?php echo htmlspecialchars($username); ?> <i class="mdi mdi-chevron-down"></i>
-        </span>
-    </a>
-    <div class="dropdown-menu dropdown-menu-end profile-dropdown">
-        <div class="dropdown-header noti-title">
-            <h6 class="text-overflow m-0">Welcome !</h6>
-        </div>
-
-        <a href="../Admin/profile.php" class="dropdown-item notify-item">
-            <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
-            <span>My Account</span>
-        </a>
-
-        <a href="auth-lock-screen.php" class="dropdown-item notify-item">
-            <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
-            <span>Lock Screen</span>
-        </a>
-
-        <div class="dropdown-divider"></div>
-
-        <a href="../Auth/logout.php" class="dropdown-item notify-item">
-            <i class="mdi mdi-location-exit fs-16 align-middle"></i>
-            <span>Logout</span>
-        </a>
-    </div>
-</li>
 
                 </ul>
             </div>

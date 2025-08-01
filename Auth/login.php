@@ -2,9 +2,25 @@
 session_start();
 require_once '../config/conn.php'; // DB connection
 
-// ✅ Redirect logged-in users to dashboard
+// ✅ Redirect already logged-in users
 if (isset($_SESSION['user_id'])) {
-    header("Location: ../Admin/");
+    $role = $_SESSION['role'] ?? '';
+    switch ($role) {
+        case 'admin':
+            header("Location: ../Admin/");
+            break;
+        case 'student':
+            header("Location: ../students/");
+            break;
+        case 'parent':
+            header("Location: ../parents/");
+            break;
+        case 'teacher':
+            header("Location: ../teachers/");
+            break;
+        default:
+            header("Location: ../index.php");
+    }
     exit;
 }
 
@@ -24,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    $sql = "SELECT id, username, password, role, status FROM users WHERE username = ? OR email = ?";
+    $sql = "SELECT id, username, password, role, status, profile_image FROM users WHERE username = ? OR email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $email, $email);
     $stmt->execute();
@@ -37,13 +53,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user_id"] = $user["id"];
             $_SESSION["username"] = $user["username"];
             $_SESSION["profile_image"] = $user["profile_image"];
-            $_SESSION["role"] = $user["role"];
+            $_SESSION["role"] = strtolower($user["role"]);
 
             if ($remember) {
                 setcookie("remember_user", $user["id"], time() + (86400 * 30), "/");
             }
 
-            header("Location: ../Admin/");
+            // ✅ Redirect based on role
+            switch ($_SESSION["role"]) {
+                case 'admin':
+                    header("Location: ../Admin/");
+                    break;
+                case 'student':
+                    header("Location: ../students/");
+                    break;
+                case 'parent':
+                    header("Location: ../parents/");
+                    break;
+                case 'teacher':
+                    header("Location: ../teachers/");
+                    break;
+                default:
+                    header("Location: ../index.php"); // fallback
+            }
             exit;
         } else {
             $_SESSION['login_error'] = "Incorrect password.";
@@ -56,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

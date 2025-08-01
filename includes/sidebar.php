@@ -1,20 +1,51 @@
+<style>
+.circle-logo {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 10px auto;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
 
+.logo-sm .circle-logo {
+  width: 40px;
+  height: 40px;
+}
+
+.logo-lg .circle-logo {
+  width: 80px;
+  height: 80px;
+}
+
+</style>
 <!-- Left Sidebar Start -->
 <div class="app-sidebar-menu">
     <div class="h-100" data-simplebar>
         <div id="sidebar-menu">
 
-            <!-- Logo -->
-            <div class="logo-box">
-                <a href="../Admin/" class="logo logo-light">
-                    <span class="logo-sm"><img src="../assets/images/logo-sm.png" height="22"></span>
-                    <span class="logo-lg"><img src="../assets/images/logo-light.png" height="24"></span>
-                </a>
-                <a href="../Admin/" class="logo logo-dark">
-                    <span class="logo-sm"><img src="../assets/images/logo-sm.png" height="22"></span>
-                    <span class="logo-lg"><img src="../assets/images/logo-dark.png" height="24"></span>
-                </a>
-            </div>
+           <div class="logo-box text-center">
+<!-- Dark Mode Logo -->
+<a href="../Admin/" class="logo logo-dark">
+  <span class="logo-sm">
+    <img src="../assets/images/logo.jpg" class="circle-logo" height="22">
+  </span>
+  <span class="logo-lg">
+    <img src="../assets/images/logo.jpg" class="circle-logo" height="84">
+  </span>
+</a>
+
+<!-- Light Mode Logo -->
+<a href="../Admin/" class="logo logo-light">
+  <span class="logo-sm">
+    <img src="../assets/images/logo.jpg" class="circle-logo" height="22">
+  </span>
+  <span class="logo-lg">
+    <img src="../assets/images/logo.jpg" class="circle-logo" height="84">
+  </span>
+</a>
+
+</div>
+
 
             <ul id="side-menu">
 
@@ -44,8 +75,9 @@
                     <div class="collapse" id="sidebarStudents">
                         <ul class="nav-second-level">
                             <li><a href="../Admin/student_list.php">Student List</a></li>
-                            <li><a href="student-profile.html">Student Profiles</a></li>
-                            <li><a href="student-attendance.html">Student Attendance</a></li>
+                            <li><a href="../Admin/student_id.php">Student ID-card</a></li>
+                            <li><a href="../Admin/leave_cert.php">Leave certificate</a></li>
+                            <li><a href="../Admin/student-attendance.php">Student Attendance</a></li>
                         </ul>
                     </div>
                 </li>
@@ -67,14 +99,23 @@
                     <a href="#sidebarTeachers" data-bs-toggle="collapse">
                         <i data-feather="users"></i> <span> Teachers </span> <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarTeachers">
-                        <ul class="nav-second-level">
-                            <li><a href="teachers.html">Teacher List</a></li>
-                            <li><a href="register-teacher.html">Add Teacher</a></li>
-                            <li><a href="teacher-profile.html">Teacher Profiles</a></li>
-                            <li><a href="teacher-attendance.html">Teacher Attendance</a></li>
-                        </ul>
-                    </div>
+                   <li class="nav-item">
+  <a class="nav-link collapsed" href="#sidebarTeachers" data-bs-toggle="collapse" aria-expanded="false">
+    <i class="fas fa-chalkboard-teacher"></i>
+    <span>Teachers</span>
+    <span class="menu-arrow"></span>
+  </a>
+  <div class="collapse" id="sidebarTeachers">
+    <ul class="nav-second-level">
+      <li><a href="../admin/teacher.php"> Teacher List</a></li>
+      <li><a href="../admin/teacher-profile.php"> Teacher Profiles</a></li>
+      <li><a href="../admin/teacher-attendance.php"> Teacher Attendance</a></li>
+      <li><a href="../admin/teacher-salary.php"> Teacher Salary</a></li>
+      <li><a href="../admin/teacher-payments.php"> Salary Payments</a></li>
+    </ul>
+  </div>
+</li>
+
                 </li>
 
                 <li>
@@ -108,8 +149,8 @@
                     </a>
                     <div class="collapse" id="sidebarExams">
                         <ul class="nav-second-level">
-                            <li><a href="exams.html">Exam List</a></li>
-                            <li><a href="create-exam.html">Create Exam</a></li>
+                            <li><a href="../Admin/exam.php">Exam List</a></li>
+                            <!-- <li><a href="create-exam.html">Create Exam</a></li> -->
                             <li><a href="exam-results.html">Exam Results</a></li>
                         </ul>
                     </div>
@@ -172,9 +213,9 @@
                     </a>
                     <div class="collapse" id="sidebarAnnouncements">
                         <ul class="nav-second-level">
-                            <li><a href="announcements.html">View All</a></li>
-                            <li><a href="create-announcement.html">Add Announcement</a></li>
-                            <li><a href="announcement-categories.html">Categories</a></li>
+                            <li><a href="../admin/announcements.php">Announcements list</a></li>
+                            <li><a href="../admin/create_announcements.php">Add Announcement</a></li>
+                            <!-- <li><a href="announcement-categories.html">Categories</a></li> -->
                         </ul>
                     </div>
                 </li>

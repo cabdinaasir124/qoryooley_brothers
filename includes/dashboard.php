@@ -1,4 +1,6 @@
  <?php
+ include '../config/conn.php'; // Adjust the path to your DB config
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -17,10 +19,95 @@ if ($hour >= 5 && $hour < 12) {
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
 
+$sql = "SELECT 
+    s.id,
+    s.student_id,
+    s.full_name,
+    s.student_image,
+    s.created_at,
+    c.class_name
+FROM 
+    students s
+JOIN 
+    classes c ON s.class_id = c.id
+ORDER BY 
+    s.created_at DESC
+LIMIT 5;
+";
+
+
+$result = $conn->query($sql);
+
+
+
+// Total students
+$students_count = $conn->query("SELECT COUNT(*) as total FROM students")->fetch_assoc()['total'];
+
+// Total parents
+$parents_count = $conn->query("SELECT COUNT(*) as total FROM parents")->fetch_assoc()['total'];
+
+// Total classes
+$classes_result = $conn->query("SELECT class_name, COUNT(*) as count FROM students 
+JOIN classes ON students.class_id = classes.id 
+GROUP BY class_name");
+
+$class_data = [];
+$total_class_students = 0;
+while ($row = $classes_result->fetch_assoc()) {
+    $class_data[] = [
+        'name' => $row['class_name'],
+        'count' => $row['count']
+    ];
+    $total_class_students += $row['count'];
+}
+
+// Total active teachers (example, update with your real table)
+$teachers_count = 42; // Placeholder. Replace with dynamic query if needed
+
+// Sample subject count
+$subjects_count = $conn->query("SELECT COUNT(*) as total FROM subjects")->fetch_assoc()['total'];
+
+// Attendance percentage today (example)
+$today = date('Y-m-d');
+$att_result = $conn->query("SELECT 
+    (SELECT COUNT(*) FROM attendance WHERE date = '$today' AND status = 'present') AS present,
+    (SELECT COUNT(*) FROM attendance WHERE date = '$today') AS total");
+
+$att_data = $att_result->fetch_assoc();
+$attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] / $att_data['total']) * 100, 1) : 0;
 
 ?>
 
+<style>
+    .bg-light-pink {
+    background-color: #fce4ec;
+}
+.text-pink {
+    color: #ec407a;
+}
 
+.bg-light-blue {
+    background-color: #e3f2fd;
+}
+.text-blue {
+    color: #42a5f5;
+}
+
+.bg-light-danger {
+    background-color: #fdecea;
+}
+.text-danger {
+    color: #e53935;
+}
+
+.bg-light-secondary {
+    background-color: #f3f4f6;
+}
+.text-secondary {
+    color: #6c757d;
+}
+
+</style>
 
  <!-- ============================================================== -->
         <!-- Start Page Content here -->
@@ -58,12 +145,12 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     <h3 class="mb-0 fs-22 text-dark me-3" id="studentCount">Loading...</h3>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <!-- <div class="d-flex align-items-center mt-3 justify-content-between">
                                 <p class="mb-0 text-dark mt-1 fs-14 fw-medium">This Month</p>
                                 <p class="text-muted mb-0 fs-13">
                                     <span class="text-success px-2 py-1 bg-success-subtle rounded-4">+3.2%</span>
                                 </p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -79,16 +166,16 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     <i class="fas fa-chalkboard-teacher text-success fs-4"></i>
                                 </span>
                                 <div>
-                                    <p class="mb-2 text-dark fs-15 fw-medium">Active Classes</p>
+                                    <p class="mb-2 text-dark fs-15 fw-medium">ongoing Classes</p>
                                     <h3 class="mb-0 fs-22 text-dark me-3" id="classCount">Loading...</h3>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <!-- <div class="d-flex align-items-center mt-3 justify-content-between">
                                 <p class="mb-0 text-dark mt-1">Today</p>
                                 <p class="text-muted mb-0 fs-13">
                                     <span class="text-success px-2 py-1 bg-success-subtle rounded-4">+5.6%</span>
                                 </p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -105,15 +192,15 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 </span>
                                 <div>
                                     <p class="mb-2 text-dark fs-15 fw-medium">Teachers</p>
-                                    <h3 class="mb-0 fs-22 text-dark me-3">58</h3>
+                                    <h3 class="mb-0 fs-22 text-dark me-3" id="countTeacher">loading..</h3>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <!-- <div class="d-flex align-items-center mt-3 justify-content-between">
                                 <p class="mb-0 text-dark mt-1">This Week</p>
                                 <p class="text-muted mb-0 fs-13">
                                     <span class="text-danger px-2 py-1 bg-danger-subtle rounded-4">-1.2%</span>
                                 </p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -133,12 +220,275 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     <h3 class="mb-0 fs-22 text-dark me-3">12</h3>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <!-- <div class="d-flex align-items-center mt-3 justify-content-between">
                                 <p class="mb-0 text-dark mt-1">This Month</p>
                                 <p class="text-muted mb-0 fs-13">
                                     <span class="text-success px-2 py-1 bg-success-subtle rounded-4">+2.8%</span>
                                 </p>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       <div class="row">
+    <!-- Girls -->
+    <div class="col-md-6 col-xl-3">
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-1">
+                    <span class="avatar-md rounded-circle bg-light-pink d-flex justify-content-center align-items-center me-3">
+                        <i class="fas fa-female text-pink fs-4"></i>
+                    </span>
+                    <div>
+                        <p class="mb-2 text-dark fs-15 fw-medium">Total Girls</p>
+                        <h3 class="mb-0 fs-22 text-dark me-3" id="girlCount">Loading...</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boys -->
+    <div class="col-md-6 col-xl-3">
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-1">
+                    <span class="avatar-md rounded-circle bg-light-blue d-flex justify-content-center align-items-center me-3">
+                        <i class="fas fa-male text-blue fs-4"></i>
+                    </span>
+                    <div>
+                        <p class="mb-2 text-dark fs-15 fw-medium">Total Boys</p>
+                        <h3 class="mb-0 fs-22 text-dark me-3" id="boyCount">Loading...</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expenses -->
+    <div class="col-md-6 col-xl-3">
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-1">
+                    <span class="avatar-md rounded-circle bg-light-danger d-flex justify-content-center align-items-center me-3">
+                        <i class="fas fa-money-bill-wave text-danger fs-4"></i>
+                    </span>
+                    <div>
+                        <p class="mb-2 text-dark fs-15 fw-medium">Monthly Expenses</p>
+                        <h3 class="mb-0 fs-22 text-dark me-3" id="expenseTotal">$0.00</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Activities -->
+    <div class="col-md-6 col-xl-3">
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-1">
+                    <span class="avatar-md rounded-circle bg-light-secondary d-flex justify-content-center align-items-center me-3">
+                        <i class="fas fa-tasks text-secondary fs-4"></i>
+                    </span>
+                    <div>
+                        <p class="mb-2 text-dark fs-15 fw-medium">Other Activities</p>
+                        <h3 class="mb-0 fs-22 text-dark me-3" id="otherActivities">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+</div>
+<!-- End Row -->
+
+
+                  
+<!-- Dashboard Section: Student Enrollment Chart + Tasks -->
+<div class="row">
+  <!-- Student Enrollment Overview -->
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Student Enrollment Overview</h5>
+      </div>
+      <div class="card-body">
+        <div id="student-statistics" class="apex-charts" style="height: 360px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Events & Tasks -->
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Upcoming Events & Tasks</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled task-list-tab mb-0" id="taskList"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Start Projects Summary -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card overflow-hidden">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title mb-0">Recently Registered Students</h5>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                           <h5 class="card-title mb-0"></h5>
+
+<table class="table table-traffic mb-0">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Admission No</th>
+            <th>Class</th>
+            <th>Registration Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if ($result && $result->num_rows > 0) {
+            $i = 1;
+            while ($row = $result->fetch_assoc()) {
+                $imagePath = !empty($row['student_image']) 
+                    ? '' . $row['student_image'] 
+                    : '../assets/images/default-user.png';
+
+                echo '<tr>';
+                echo '<td>' . $i++ . '</td>';
+                echo '<td><img src="' . $imagePath . '" width="40" height="40" class="rounded-circle" alt="Photo"></td>';
+                echo '<td>' . htmlspecialchars($row['full_name']) . '</td>';
+                echo '<td>' . htmlspecialchars($row['student_id']) . '</td>';
+                echo '<td>' . htmlspecialchars($row['class_name']) . '</td>';
+                echo '<td>' . date('d M Y', strtotime($row['created_at'])) . '</td>';
+                echo '</tr>';
+            }
+        } else {
+            echo '<tr><td colspan="6" class="text-center">No students found</td></tr>';
+        }
+        $result->free();
+        $conn->close();
+        ?>
+    </tbody>
+</table>
+
+                        </div>
+                    </div>
+
+                    <div class="card-footer py-0 border-top">
+                        <div class="row align-items-center">
+                            <div class="col-sm">
+                                <div class="text-block text-center text-sm-start">
+                                    <span class="fw-medium">1 of 3</span>
+                                </div>
                             </div>
+                            <div class="col-sm-auto mt-3 mt-sm-0">
+                                <div class="pagination gap-2 justify-content-center py-3 ps-0 pe-3">
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item disabled">
+                                            <a class="page-link me-2 rounded-2" href="javascript:void(0);">
+                                                Prev </a>
+                                        </li>
+                                        <li class="page-item active">
+                                            <a class="page-link rounded-2 me-2" href="#" data-i="1"
+                                                data-page="5">1</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link me-2 rounded-2" href="#" data-i="2"
+                                                data-page="5">2</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link text-primary rounded-2"
+                                                href="javascript:void(0);"> next </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Projects Summary -->
+
+                    <!-- Start School and Qur'an System Overview -->
+<div class="row">
+
+    <!-- School Categories & Statistics -->
+    <!-- School Categories & Statistics -->
+<div class="col-md-6 col-xl-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+            <h5 class="card-title mb-0">Class Breakdown</h5>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row align-items-center">
+
+                <div class="col align-items-center">
+                    <div id="project-categories" class="apex-charts"></div>
+                </div>
+
+                <div class="col">
+                    <?php foreach ($class_data as $class): 
+                        $percent = $total_class_students > 0 
+                            ? round(($class['count'] / $total_class_students) * 100, 1) 
+                            : 0;
+                        $color = '#' . substr(md5($class['name']), 0, 6); // random consistent color
+                    ?>
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <div>
+                                <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: <?= $color ?>"></i>
+                                <span class="align-middle fw-semibold"><?= htmlspecialchars($class['name']) ?></span>
+                            </div>
+                            <span class="fw-medium text-muted float-end">
+                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
+                                <?= $percent ?>%
+                            </span>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="row row-cols-12 border border-dashed border-1 rounded-2 mt-2">
+                <div class="col">
+                    <div class="p-2 border-end border-inline-end-dashed">
+                        <p class="mb-1 text-muted text-start">Students Enrolled</p>
+                        <div class="d-flex align-items-center mt-2 justify-content-between me-2">
+                            <h3 class="mb-0 fs-22 text-dark me-3"><?= $students_count ?></h3>
+                            <span class="text-primary fs-14">
+                                <i class="mdi mdi-trending-up fs-14"></i> <?= rand(3, 10) ?>%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="p-2 ps-0">
+                        <p class="mb-1 text-muted text-start">Active Teachers</p>
+                        <div class="d-flex align-items-center mt-2 justify-content-between">
+                            <h3 class="mb-0 fs-22 text-dark me-3"><?= $teachers_count ?></h3>
+                            <span class="text-primary fs-14">
+                                <i class="mdi mdi-trending-up fs-14"></i> <?= rand(2, 8) ?>%
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -147,241 +497,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
         </div>
     </div>
 </div>
-<!-- End Row -->
 
-
-                    <!-- Start Project Statistics -->
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-<h5 class="card-title mb-0">Student Enrollment Overview</h5>
-<div id="school-quran-statistics" class="apex-charts"></div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-                                    <div id="project-statistics" class="apex-charts"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-<h5 class="card-title mb-0">Upcoming Events & Tasks</h5>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-                                    <ul class="list-unstyled task-list-tab mb-0">
-
-                                        <li>
-                                            <div class="d-flex mb-2 pb-1">
-                                                <div class="form-check  me-2">
-                                                    <input type="checkbox" class="form-check-input">
-                                                </div>
-                                                <div class="flex-fill w-100">
-                                                    <div class="d-flex align-items-start justify-content-between gap-1">
-                                                        <div>
-                                                            <h6 class="d-block fw-medium mb-1 text-dark fs-15">Prepare Midterm Exam Papers</h6>
-                                                            <p class="text-muted mb-0 fs-13">August 15, 2025</p>
-
-                                                        </div>
-                                                        <button class="btn btn-light btn-sm border">Edit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                       <li>
-    <div class="d-flex mb-2 pb-1">
-        <div class="form-check me-2">
-            <input type="checkbox" class="form-check-input">
-        </div>
-        <div class="flex-fill w-100">
-            <div class="d-flex align-items-start justify-content-between gap-1">
-                <div>
-                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Prepare Exam Timetable</h6>
-                    <p class="text-muted mb-0 fs-13">August 5, 2025</p>
-                </div>
-                <button class="btn btn-light btn-sm border">Edit</button>
-            </div>
-        </div>
-    </div>
-</li>
-
-<li>
-    <div class="d-flex mb-2 pb-1">
-        <div class="form-check me-2">
-            <input type="checkbox" class="form-check-input" checked="">
-        </div>
-        <div class="flex-fill w-100">
-            <div class="d-flex align-items-start justify-content-between gap-1">
-                <div>
-                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Update Student Attendance</h6>
-                    <p class="text-muted mb-0 fs-13">July 22, 2025</p>
-                </div>
-                <button class="btn btn-light btn-sm border">Edit</button>
-            </div>
-        </div>
-    </div>
-</li>
-
-<li>
-    <div class="d-flex mb-2 pb-1">
-        <div class="form-check me-2">
-            <input type="checkbox" class="form-check-input">
-        </div>
-        <div class="flex-fill w-100">
-            <div class="d-flex align-items-start justify-content-between gap-1">
-                <div>
-                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Review Hifz Progress Reports</h6>
-                    <p class="text-muted mb-0 fs-13">July 25, 2025</p>
-                </div>
-                <button class="btn btn-light btn-sm border">Edit</button>
-            </div>
-        </div>
-    </div>
-</li>
-
-<li>
-    <div class="d-flex mb-2 pb-1">
-        <div class="form-check me-2">
-            <input type="checkbox" class="form-check-input">
-        </div>
-        <div class="flex-fill w-100">
-            <div class="d-flex align-items-start justify-content-between gap-1">
-                <div>
-                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Assign Quranic Subjects</h6>
-                    <p class="text-muted mb-0 fs-13">August 1, 2025</p>
-                </div>
-                <button class="btn btn-light btn-sm border">Edit</button>
-            </div>
-        </div>
-    </div>
-</li>
-
-<li>
-    <div class="d-flex mb-2 pb-1">
-        <div class="form-check me-2">
-            <input type="checkbox" class="form-check-input" checked="">
-        </div>
-        <div class="flex-fill w-100">
-            <div class="d-flex align-items-start justify-content-between gap-1">
-                <div>
-                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Upload Exam Results</h6>
-                    <p class="text-muted mb-0 fs-13">July 20, 2025</p>
-                </div>
-                <button class="btn btn-light btn-sm border">Edit</button>
-            </div>
-        </div>
-    </div>
-</li>
-
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <!-- End Project Statistics -->
-
-                    <!-- Start School and Qur'an System Overview -->
-<div class="row">
-
-    <!-- School Categories & Statistics -->
-    <div class="col-md-6 col-xl-4">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0">School Categories</h5>
-                </div>
-            </div>
-
-            <div class="card-body">
-                <div class="row align-items-center">
-
-                    <div class="col align-items-center">
-                        <div id="project-categories" class="apex-charts"></div>
-                    </div>
-
-                    <div class="col">
-                        <div class="d-flex justify-content-between align-items-center p-1">
-                            <div>
-                                <i class="mdi mdi-circle fs-12 align-middle me-1 text-success"></i>
-                                <span class="align-middle fw-semibold">Qur’an Classes</span>
-                            </div>
-                            <span class="fw-medium text-muted float-end">
-                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                18.5%
-                            </span>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center p-1">
-                            <div>
-                                <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: #522c8f;"></i>
-                                <span class="align-middle fw-semibold">Primary School</span>
-                            </div>
-                            <span class="fw-medium text-muted float-end">
-                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                21.3%
-                            </span>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center p-1">
-                            <div>
-                                <i class="mdi mdi-circle fs-12 align-middle me-1 text-warning"></i>
-                                <span class="align-middle fw-semibold">Secondary School</span>
-                            </div>
-                            <span class="fw-medium text-muted float-end">
-                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                16.9%
-                            </span>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center p-1">
-                            <div>
-                                <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: #01D4FF;"></i>
-                                <span class="align-middle fw-semibold">Evening Classes</span>
-                            </div>
-                            <span class="fw-medium text-muted float-end">
-                                <i class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>
-                                10.4%
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row row-cols-12 border border-dashed border-1 rounded-2 mt-2">
-                    <div class="col">
-                        <div class="p-2 border-end border-inline-end-dashed">
-                            <p class="mb-1 text-muted text-start">Students Enrolled</p>
-                            <div class="d-flex align-items-center mt-2 justify-content-between me-2">
-                                <h3 class="mb-0 fs-22 text-dark me-3">1,150</h3>
-                                <span class="text-primary fs-14"><i class="mdi mdi-trending-up fs-14"></i> 7.2%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="p-2 ps-0">
-                            <p class="mb-1 text-muted text-start">Active Teachers</p>
-                            <div class="d-flex align-items-center mt-2 justify-content-between">
-                                <h3 class="mb-0 fs-22 text-dark me-3">42</h3>
-                                <span class="text-primary fs-14"><i class="mdi mdi-trending-up fs-14"></i> 5.1%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
 
     <!-- School Budget -->
     <div class="col-md-6 col-xl-5">
@@ -490,444 +606,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 <!-- End School and Qur'an System Overview -->
 
 
-        <!-- Start Projects Summary -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card overflow-hidden">
-                    <div class="card-header">
-                        <div class="d-flex align-items-center">
-                            <h5 class="card-title mb-0">Projects Summary</h5>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-traffic mb-0">
-
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Project</th>
-                                        <th>Tasks</th>
-                                        <th>Progress</th>
-                                        <th>Status</th>
-                                        <th>Due Date</th>
-                                        <th>Team</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-
-                                <tr>
-                                    <td>
-                                        <a href="javascript:void(0);" class="text-dark">1</a>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 fw-medium fs-14">Update the API</p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">101</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar  bg-primary" style="width: 25%">
-                                                </div>
-                                            </div>
-                                            <div class="ms-2">25%</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-primary-subtle text-primary">In
-                                            Progress</span>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">14 November 2024</p>
-                                    </td>
-                                    <td class="">
-                                        <div class="avatar-group avatar-list-stack">
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-12.jpg"
-                                                    alt="Dianna Smiley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-4.jpg"
-                                                    alt="Daniela Dewitt">
-                                            </a>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <a aria-label="anchor"
-                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                        </a>
-                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <a href="javascript:void(0);" class="text-dark">2</a>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 fw-medium fs-14">Release v1.2-Beta</p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">124</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar  bg-primary" style="width: 85%">
-                                                </div>
-                                            </div>
-                                            <div class="ms-2">85%</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-primary-subtle text-primary">In
-                                            Progress</span>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">16 November 2024</p>
-                                    </td>
-                                    <td class="">
-                                        <div class="avatar-group avatar-list-stack">
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-12.jpg"
-                                                    alt="Dianna Smiley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-4.jpg"
-                                                    alt="Daniela Dewitt">
-                                            </a>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <a aria-label="anchor"
-                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                        </a>
-                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <a href="javascript:void(0);" class="text-dark">3</a>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 fw-medium fs-14"> Landing Design </p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">74</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                aria-valuenow="47" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar  bg-primary" style="width: 47%">
-                                                </div>
-                                            </div>
-                                            <div class="ms-2">47%</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-primary-subtle text-primary">In
-                                            Progress</span>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">18 November 2024</p>
-                                    </td>
-                                    <td class="">
-                                        <div class="avatar-group avatar-list-stack">
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-12.jpg"
-                                                    alt="Dianna Smiley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-4.jpg"
-                                                    alt="Daniela Dewitt">
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a aria-label="anchor"
-                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                        </a>
-                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <a href="javascript:void(0);" class="text-dark">4</a>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 fw-medium fs-14"> Designing New Template</p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">08</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar  bg-primary" style="width: 0%">
-                                                </div>
-                                            </div>
-                                            <div class="ms-2">0%</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-danger-subtle text-danger">Pending</span>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">20 November 2024</p>
-                                    </td>
-                                    <td class="">
-                                        <div class="avatar-group avatar-list-stack">
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-12.jpg"
-                                                    alt="Dianna Smiley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-4.jpg"
-                                                    alt="Daniela Dewitt">
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a aria-label="anchor"
-                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                        </a>
-                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <a href="javascript:void(0);" class="text-dark">5</a>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 fw-medium fs-14">Plan design offsite</p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">52</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar  bg-primary" style="width: 100%">
-                                                </div>
-                                            </div>
-                                            <div class="ms-2">100%</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-success-subtle text-success">Completed</span>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">25 November 2024</p>
-                                    </td>
-                                    <td class="">
-                                        <div class="avatar-group avatar-list-stack">
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-12.jpg"
-                                                    alt="Dianna Smiley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-4.jpg"
-                                                    alt="Daniela Dewitt">
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a aria-label="anchor"
-                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                        </a>
-                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <a href="javascript:void(0);" class="text-dark">6</a>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 fw-medium fs-14">Home Page</p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">45</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress progress-sm w-100 mt-0" role="progressbar"
-                                                aria-valuenow="49" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar  bg-primary" style="width: 49%">
-                                                </div>
-                                            </div>
-                                            <div class="ms-2">49%</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-primary-subtle text-primary">In
-                                            Progress</span>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 text-muted">11 December 2024</p>
-                                    </td>
-                                    <td class="">
-                                        <div class="avatar-group avatar-list-stack">
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-12.jpg"
-                                                    alt="Dianna Smiley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-2.jpg" alt="Ab Hadley">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-3.jpg" alt="Adolfo Hess">
-                                            </a>
-                                            <a href="#">
-                                                <img class="avatar-img avatar avatar-xs rounded-circle img-fluid"
-                                                    src="../assets/images/users/user-4.jpg"
-                                                    alt="Daniela Dewitt">
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a aria-label="anchor"
-                                            class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                        </a>
-                                        <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle"
-                                            data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                            <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="card-footer py-0 border-top">
-                        <div class="row align-items-center">
-                            <div class="col-sm">
-                                <div class="text-block text-center text-sm-start">
-                                    <span class="fw-medium">1 of 3</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-auto mt-3 mt-sm-0">
-                                <div class="pagination gap-2 justify-content-center py-3 ps-0 pe-3">
-                                    <ul class="pagination mb-0">
-                                        <li class="page-item disabled">
-                                            <a class="page-link me-2 rounded-2" href="javascript:void(0);">
-                                                Prev </a>
-                                        </li>
-                                        <li class="page-item active">
-                                            <a class="page-link rounded-2 me-2" href="#" data-i="1"
-                                                data-page="5">1</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link me-2 rounded-2" href="#" data-i="2"
-                                                data-page="5">2</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link text-primary rounded-2"
-                                                href="javascript:void(0);"> next </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Projects Summary -->
+        
 
         </div> <!-- container-fluid -->
     </div> <!-- content -->
@@ -938,3 +617,4 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
         <!-- ============================================================== -->
         <!-- End Page content -->
         <!-- ============================================================== -->
+         
