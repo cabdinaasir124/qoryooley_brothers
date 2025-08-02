@@ -30,7 +30,20 @@
         </div>
       </div>
 
-      <!-- Add Teacher Modal -->
+       <!-- Add Teacher Modal -->
+      <div class="modal fade" id="editTeacherModal" tabindex="-1" aria-labelledby="editTeacherModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="editTeacherModalContent">
+           
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+   <!-- Add Teacher Modal -->
       <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -80,6 +93,34 @@
           </div>
         </div>
       </div>
+
+
+
+
+      <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Teacher Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <!-- JS will fill this area -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+ 
+
+     
+  
+
+
+      
     </div>
   </div>
 </div>
