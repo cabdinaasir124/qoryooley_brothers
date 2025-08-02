@@ -276,7 +276,7 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
                         <i class="fas fa-money-bill-wave text-danger fs-4"></i>
                     </span>
                     <div>
-                        <p class="mb-2 text-dark fs-15 fw-medium">Monthly Expenses</p>
+                        <p class="mb-2 text-dark fs-15 fw-medium">Monthly income</p>
                         <h3 class="mb-0 fs-22 text-dark me-3" id="expenseTotal">$0.00</h3>
                     </div>
                 </div>
@@ -500,7 +500,7 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
 
 
     <!-- School Budget -->
-    <div class="col-md-6 col-xl-5">
+    <div class="col-md-9 col-xl-8">
         <div class="card">
             <div class="card-header">
                 <div class="d-flex align-items-center">
@@ -508,8 +508,10 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
                 </div>
             </div>
             <div class="card-body">
-                <div id="project_budget" class="apex-charts"></div>
-            </div>
+
+          <canvas id="expenseChart" height="200"></canvas>
+        </div>
+      </div>           
         </div>
     </div>
 

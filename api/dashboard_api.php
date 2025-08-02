@@ -34,17 +34,19 @@ if ($action === 'summary_stats') {
     $teachers = mysqli_fetch_assoc($teachersResult)['total_teachers'];
 
     // Monthly Expenses
-    $expensesResult = mysqli_query($conn, "
-        SELECT IFNULL(SUM(amount), 0) AS total_expense 
-        FROM expenses 
-        WHERE MONTH(date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE())
-    ");
-    if (!$expensesResult) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Query failed (expenses): ' . mysqli_error($conn)]);
-        exit;
-    }
-    $expenseTotal = mysqli_fetch_assoc($expensesResult)['total_expense'];
+   $expensesResult = mysqli_query($conn, "
+    SELECT IFNULL(SUM(amount), 0) AS total_expense 
+    FROM expenses 
+    WHERE category != 'Income' 
+      AND MONTH(date) = MONTH(CURDATE()) 
+      AND YEAR(date) = YEAR(CURDATE())
+");
+if (!$expensesResult) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Query failed (expenses): ' . mysqli_error($conn)]);
+    exit;
+}
+$expenseTotal = mysqli_fetch_assoc($expensesResult)['total_expense'];
 
     // Activities Count
     $activitiesResult = mysqli_query($conn, "SELECT COUNT(*) AS total_activities FROM activities");

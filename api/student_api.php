@@ -107,7 +107,7 @@ if ($action === 'create' || $action === 'update') {
 }
 
 if ($action === 'delete') {
-    $student_id = $_POST['student_id'];
+    $student_id = $_POST['student_id'] ?? null;
     $stmt = $conn->prepare("DELETE FROM students WHERE student_id = ?");
     $stmt->bind_param("s", $student_id);
     echo json_encode(['status' => $stmt->execute() ? 'deleted' : 'error', 'message' => $stmt->error]);

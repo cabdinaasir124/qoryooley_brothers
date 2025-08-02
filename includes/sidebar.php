@@ -130,6 +130,18 @@
                     </div>
                 </li>
 
+
+                <li>
+                <a href="#sidebarFinance" data-bs-toggle="collapse">
+                    <i data-feather="dollar-sign"></i> <span> Finance </span> <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarFinance">
+                    <ul class="nav-second-level">
+                    <li><a href="../admin/expenses.php">Expense List</a></li>
+                    </ul>
+                </div>
+                </li>
+
                 <li>
                     <a href="#sidebarClasses" data-bs-toggle="collapse">
                         <i data-feather="layers"></i> <span> Classes </span> <span class="menu-arrow"></span>

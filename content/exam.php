@@ -1,12 +1,7 @@
-<?php
-// File: exam_list.php
-include '../config/conn.php';
-?>
-
+<?php include '../config/conn.php'; ?>
 <div class="content-page">
   <div class="content">
     <div class="container-fluid">
-
       <div class="row mt-3">
         <div class="col-12">
           <div class="card shadow">
@@ -60,7 +55,7 @@ include '../config/conn.php';
                   <label class="form-label">Term</label>
                   <select class="form-select" name="term" required>
                     <option value="Term 1">Term 1</option>
-                    <option value="mid-Term">Mid-Term</option>
+                    <option value="Mid-Term">Mid-Term</option>
                     <option value="Term 2">Term 2</option>
                     <option value="Final">Final</option>
                   </select>
@@ -86,15 +81,16 @@ include '../config/conn.php';
                 </div>
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Assign to Classes</label>
-                  <select class="form-select" name="class_ids[]" multiple required>
-                    <option value="all">All Classes</option>
-                    <?php
-                    $classes = $conn->query("SELECT * FROM classes");
-                    while ($cls = $classes->fetch_assoc()) {
-                      echo "<option value='{$cls['id']}'>{$cls['class_name']}</option>";
-                    }
-                    ?>
-                  </select>
+                <select class="form-select" name="class_ids[]" multiple required>
+                  <option value="all">All Classes</option>
+                  <?php
+                  $classes = $conn->query("SELECT * FROM classes");
+                  while ($cls = $classes->fetch_assoc()) {
+                    echo "<option value='{$cls['id']}'>{$cls['class_name']}</option>";
+                  }
+                  ?>
+                </select>
+
                 </div>
               </div>
               <div class="modal-footer">
@@ -109,5 +105,3 @@ include '../config/conn.php';
     </div>
   </div>
 </div>
-
-

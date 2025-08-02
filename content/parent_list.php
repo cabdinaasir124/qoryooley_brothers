@@ -19,27 +19,24 @@ $academic_year_id = $_GET['academic_year_id'] ?? '';
             </div>
 
             <div class="card-body">
-              <table id="parentTable" class="table table-striped display responsive  nowrap w-100">
-                <?php if (!$academic_year_id): ?>
-  <div class="alert alert-warning mt-3">Please select an Academic Year to view parents.</div>
-<?php endif; ?>
+           <table id="parentTable" class="table table-striped display responsive nowrap w-100">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Parent Name</th>
+      <th>Phone</th>
+      <th>Relationship</th>
+      <th>Address</th>
+      <th>Guarantor</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Parent Name</th>
-                    <th>Phone</th>
-                    <th>Relationship</th>
-                    
-                    <th>Update</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  
-                 <!-- this will dynamically fetch -->
-                </tbody>
-              </table>
+
+
               
             </div>
 
@@ -97,6 +94,15 @@ $academic_year_id = $_GET['academic_year_id'] ?? '';
               </select>
             </div>
 
+             <div class="col-md-6">
+              <label for="parent_phone" class="form-label">Address</label>
+              <input type="text" class="form-control" name="Address" id="Address" required>
+            </div>
+
+             <div class="col-md-6">
+              <label for="parent_phone" class="form-label">guarantor name</label>
+              <input type="text" class="form-control" name="guarantor" id="guarantor" required>
+            </div>
             
 
           </div>
