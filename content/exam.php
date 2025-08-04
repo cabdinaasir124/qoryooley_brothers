@@ -33,6 +33,17 @@
         </div>
       </div>
 
+      <div class="modal fade" id="updateExamModal" tabindex="-1" aria-labelledby="updateExamModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <!-- Form-ka update-ka ayaa ajax ahaan halkan ku dhici doona -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
       <!-- Modal -->
       <div class="modal fade" id="createExamModal" tabindex="-1" aria-labelledby="createExamLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
