@@ -65,7 +65,8 @@ $(document).ready(function () {
 
   //  Exam Delete Start Here
  // ✅ Kani sax ayuu noqonayaa
-$('#examTable').on("click", ".examDelete", function (e) {
+// Put this outside of fetchExams() and not inside DataTable init
+$(document).on("click", ".examDelete", function (e) {
   e.preventDefault();
   const id = $(this).attr('exam-id');
   if (!id) {
@@ -82,8 +83,8 @@ $('#examTable').on("click", ".examDelete", function (e) {
     dataType: 'json',
     success: function (response) {
       if (response.status === 'success') {
+        fetchExams(); // reload without full page refresh
         Toastify({ text: response.message, backgroundColor: "green", duration: 3000 }).showToast();
-          fetchExams();
       } else {
         Toastify({ text: response.message, backgroundColor: "red", duration: 3000 }).showToast();
       }
@@ -93,6 +94,7 @@ $('#examTable').on("click", ".examDelete", function (e) {
     }
   });
 });
+
   //  Exam Delete End Here
   //  Exam Update Start Here
 // edit button click
