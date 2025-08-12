@@ -76,12 +76,13 @@ if ($action === 'create' || $action === 'update') {
     $gender = $_POST['gender'];
     $dob = $_POST['date_of_birth'];
     $pob = $_POST['place_of_birth'];
-    $address = $_POST['address'];
+    // $address = $_POST['address'];
     $class_id = intval($_POST['class_id']);
     $academic_year_id = intval($_POST['academic_year_id']);
     $parent_id = intval($_POST['parent_id']);
     $status = $_POST['status'];
     $notes = $_POST['notes'];
+    $department_type = $_POST['department_type'];
 
     $imagePath = '';
     if (!empty($_FILES['student_image']['name'])) {
@@ -95,24 +96,71 @@ if ($action === 'create' || $action === 'update') {
     }
 
     if ($isUpdate) {
-        $stmt = $conn->prepare("UPDATE students SET full_name=?, gender=?, date_of_birth=?, place_of_birth=?, address=?, class_id=?, academic_year_id=?, parent_id=?, status=?, notes=? WHERE id=?");
-        $stmt->bind_param("sssssiiissi", $full_name, $gender, $dob, $pob, $address, $class_id, $academic_year_id, $parent_id, $status, $notes, $id);
-    } else {
-        $stmt = $conn->prepare("INSERT INTO students (student_id, full_name, gender, date_of_birth, place_of_birth, address, class_id, academic_year_id, parent_id, status, notes, student_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssiiisss", $student_id, $full_name, $gender, $dob, $pob, $address, $class_id, $academic_year_id, $parent_id, $status, $notes, $imagePath);
-    }
+    $stmt = $conn->prepare("
+        UPDATE students 
+        SET full_name=?, gender=?, department_type=?, date_of_birth=?, place_of_birth=?, class_id=?, academic_year_id=?, parent_id=?, status=?, notes=?, student_image=? 
+        WHERE id=?
+    ");
+    $stmt->bind_param(
+        "ssssssiiisssi", 
+        $full_name, 
+        $gender, 
+        $department_type, 
+        $dob, 
+        $pob, 
+        $class_id, 
+        $academic_year_id, 
+        $parent_id, 
+        $status, 
+        $notes, 
+        $imagePath, 
+        $id
+    );
+
+} else {
+    $stmt = $conn->prepare("
+        INSERT INTO students 
+        (student_id, full_name, gender, department_type, date_of_birth, place_of_birth, class_id, academic_year_id, parent_id, status, notes, student_image) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "ssssssiiisss", 
+        $student_id, 
+        $full_name, 
+        $gender, 
+        $department_type, 
+        $dob, 
+        $pob, 
+        $class_id, 
+        $academic_year_id, 
+        $parent_id, 
+        $status, 
+        $notes, 
+        $imagePath
+    );
+}
+
+
 
     echo json_encode(['status' => $stmt->execute() ? 'success' : 'error', 'message' => $stmt->error]);
     exit;
 }
 
 if ($action === 'delete') {
-    $student_id = $_POST['student_id'] ?? null;
-    $stmt = $conn->prepare("DELETE FROM students WHERE student_id = ?");
-    $stmt->bind_param("s", $student_id);
-    echo json_encode(['status' => $stmt->execute() ? 'deleted' : 'error', 'message' => $stmt->error]);
+    $id = intval($_POST['id'] ?? 0); // ✅ match JS
+    $stmt = $conn->prepare("DELETE FROM students WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    if ($stmt->affected_rows > 0) {
+        echo json_encode(['status' => 'deleted']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Student not found or already deleted']);
+    }
     exit;
 }
+
+
 
 if ($action === 'get') {
     $id = intval($_GET['id']);

@@ -18,6 +18,7 @@
       <div class="card-body text-center">
         <h5 class="text-success">Total Income</h5>
         <h4 class="text-success" id="totalIncome">$0</h4>
+          <div id="incomeNote" class="text-danger small mt-2" style="display:none;"></div>
       </div>
     </div>
   </div>

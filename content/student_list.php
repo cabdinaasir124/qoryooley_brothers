@@ -33,32 +33,31 @@ $academic_year_id = $_GET['academic_year_id'] ?? '';
   </select>
 </div>
 
-                                       <table id="studentTable" class="table table-striped dt-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                            <th>#</th>
-                                            <th>student ID</th>
-                                            <th>Student Name</th>
-                                            <th>Class</th>
-                                            <th>Parent Name</th>
-                                            <th>view more</th>
-                                            <!-- <th>update</th> -->
-                                            <!-- <th>delete</th> -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Example static row (replace with PHP or JS dynamic later) -->
-                                           
-                                        </tbody>
-                                        </table>
+  <table id="studentTable" class="table table-striped dt-responsive nowrap w-100">
+  <thead>
+      <tr>
+      <th>#</th>
+      <th>student ID</th>
+      <th>Student Name</th>
+      <th>Class</th>
+      <th>Parent Name</th>
+      <th>view more</th>
+      <!-- <th>update</th> -->
+      <!-- <th>delete</th> -->
+      </tr>
+  </thead>
+  <tbody>
+      <!-- Example static row (replace with PHP or JS dynamic later) -->
+  </tbody>
+  </table>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </div>
+      </div>
   </div>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 <!-- Student Registration Modal -->
 <div class="modal fade" id="addStudentModal" tabindex="-1" aria-hidden="true">
@@ -75,11 +74,11 @@ $academic_year_id = $_GET['academic_year_id'] ?? '';
             <!-- Left Column -->
             <div class="col-md-6">
               <div class="mb-2">
-<input type="hidden" name="academic_year_id" id="academic_year_hidden" value="<?= $academic_year_id ?>">
-<input type="hidden" name="id" id="student_db_id">
+              <input type="hidden" name="academic_year_id" id="academic_year_hidden" value="<?= $academic_year_id ?>">
+              <input type="hidden" name="id" id="student_db_id">
 
                 <label for="student_id" class="form-label">Student ID</label>
-                <input type="text" id="student_id" name="student_id" class="form-control" readonly>
+                <input type="text" id="student_id2" name="student_id2" class="form-control" readonly>
               </div>
 
               <div class="mb-2">
@@ -107,9 +106,18 @@ $academic_year_id = $_GET['academic_year_id'] ?? '';
               </div>
 
               <div class="mb-2">
-                <label for="address" class="form-label">Address</label>
-                <textarea name="address" id="address" class="form-control" rows="2"></textarea>
+                <!-- <label for="address" class="form-label">Address</label>
+                <textarea name="address" id="address" class="form-control" rows="2"></textarea> -->
               </div>
+              <div class="mb-2">
+              <label for="department_type" class="form-label">Department Type</label>
+              <select name="department_type" id="department_type" class="form-select">
+                <option value="">-- Select Department Type --</option>
+                <option value="quranic">Quranic</option>
+                <option value="school">School</option>
+                <option value="both">Both</option>
+              </select>
+            </div>
             </div>
 
             <!-- Right Column -->
@@ -180,6 +188,7 @@ if (!$years) {
                 <label for="notes" class="form-label">Notes</label>
                 <textarea name="notes" id="notes" class="form-control" rows="2"></textarea>
               </div>
+              
             </div>
           </div>
         </div>

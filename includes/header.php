@@ -115,6 +115,16 @@ if ($role === 'admin') {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
+        <!-- Include Select2 CSS & JS -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Bootstrap theme for Select2 (optional) -->
+<link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+
 
         <!-- Datatables css -->
         <link href="../assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
@@ -140,6 +150,39 @@ if ($role === 'admin') {
                 font-weight: bold;
                 color: white;
             }
+
+            /* Select2 inside Bootstrap modal custom styles */
+.select2-container--bootstrap4 .select2-selection {
+  border: 1px solid #007bff !important;
+  border-radius: 0.375rem !important;
+  padding: 0.375rem 0.75rem !important;
+  height: auto !important;
+  background-color: #f8f9fa !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.select2-container--bootstrap4 .select2-selection:hover {
+  border-color: #0056b3 !important;
+  background-color: #ffffff !important;
+}
+
+.select2-container--bootstrap4 .select2-selection__rendered {
+  color: #343a40 !important;
+  font-weight: 500;
+}
+
+.select2-container--bootstrap4 .select2-selection__arrow {
+  height: 100% !important;
+}
+
+.select2-results__option {
+  padding: 8px 12px;
+}
+
+.select2-results__option--highlighted {
+  background-color: #007bff !important;
+  color: white !important;
+}
 
         </style>
 

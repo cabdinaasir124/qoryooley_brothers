@@ -95,10 +95,8 @@
             </li>
 
 
-                <li>
-                    <a href="#sidebarTeachers" data-bs-toggle="collapse">
-                        <i data-feather="users"></i> <span> Teachers </span> <span class="menu-arrow"></span>
-                    </a>
+                
+                    
                    <li class="nav-item">
   <a class="nav-link collapsed" href="#sidebarTeachers" data-bs-toggle="collapse" aria-expanded="false">
     <i class="fas fa-chalkboard-teacher"></i>
@@ -179,7 +177,7 @@
                     </a>
                     <div class="collapse" id="sidebarQuranic">
                         <ul class="nav-second-level">
-                            <li><a href="hifz.html">Hifz Progress</a></li>
+                            <li><a href="../Admin/hifz.php">Hifz Progress</a></li>
                             <li><a href="tajweed.html">Tajweed Records</a></li>
                             <li><a href="teacher-halaqa-schedule.html"></i> <span> Halaqa Schedule </span></a></li>
                             <li><a href="quranic-subjects.html">Quranic Subjects</a></li>

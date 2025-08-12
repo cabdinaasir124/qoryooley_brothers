@@ -84,6 +84,9 @@ $(document).on("click", ".examDelete", function (e) {
     success: function (response) {
       if (response.status === 'success') {
         fetchExams(); // reload without full page refresh
+        if ($.fn.DataTable.isDataTable('#examTable')) {
+            $('#examTable').DataTable().clear().destroy();
+        }
         Toastify({ text: response.message, backgroundColor: "green", duration: 3000 }).showToast();
       } else {
         Toastify({ text: response.message, backgroundColor: "red", duration: 3000 }).showToast();
@@ -130,7 +133,11 @@ $(document).on('click', '.examEdit', function () {
     success: function (res) {
       if (res.status === "success") {
         $("#updateExamModal").modal("hide");
-        fetchExams(); // refresh list
+        fetchExams();
+        if ($.fn.DataTable.isDataTable('#examTable')) {
+            $('#examTable').DataTable().clear().destroy();
+        }
+        // refresh list
         Toastify({ text: res.message, backgroundColor: "green" }).showToast();
       } else {
         Toastify({ text: res.message || "Failed to update", backgroundColor: "red" }).showToast();

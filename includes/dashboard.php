@@ -276,7 +276,7 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
                         <i class="fas fa-money-bill-wave text-danger fs-4"></i>
                     </span>
                     <div>
-                        <p class="mb-2 text-dark fs-15 fw-medium">Monthly income</p>
+                        <p class="mb-2 text-dark fs-15 fw-medium">Expenses</p>
                         <h3 class="mb-0 fs-22 text-dark me-3" id="expenseTotal">$0.00</h3>
                     </div>
                 </div>

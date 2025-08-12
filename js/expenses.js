@@ -1,8 +1,9 @@
+// 📁 File: assets/js/expense_manager.js
+
 $(document).ready(function () {
   let table;
   let expenseChart;
 
-  // Initialize DataTable
   function initializeDataTable() {
     table = $('#expenseTable').DataTable({
       responsive: true,
@@ -20,54 +21,85 @@ $(document).ready(function () {
     });
   }
 
-  // Fetch and load expenses (with optional category filter)
-  function fetchExpenses(filterCategory = '') {
-    $.getJSON('../api/expenses_api.php?action=fetch', function (data) {
-      table.clear();
+  function updateTotals() {
+    $.getJSON('../api/expenses_api.php?action=totals', function (totals) {
+      $('#totalIncome').text(`$${totals.income.toFixed(2)}`);
+      $('#totalExpenses').text(`$${totals.expenses.toFixed(2)}`);
+      $('#currentBalance').text(`$${totals.balance.toFixed(2)}`);
 
-      // Filter if category selected
-      let filtered = filterCategory
-        ? data.filter(item => item.category === filterCategory)
-        : data;
-
-      let totalIncome = 0;
-      let totalExpenses = 0;
-
-      filtered.forEach((row, i) => {
-        const amount = parseFloat(row.amount);
-        if (row.category === 'Income') totalIncome += amount;
-        else totalExpenses += amount;
-
-        table.row.add([
-          i + 1,
-          row.title,
-          row.description || '-',
-          '$' + amount.toFixed(2),
-          row.date,
-          row.category,
-          `
-          <button class="btn btn-sm btn-warning edit-btn" data-id="${row.id}">Edit</button>
-          <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}">Delete</button>
-          `
-        ]);
-      });
-
-      table.draw();
-
-      $('#totalIncome').text(`$${totalIncome.toFixed(2)}`);
-        $('#totalExpenses').text(`$${totalExpenses.toFixed(2)}`);
-        $('#currentBalance').text(`$${(totalIncome - totalExpenses).toFixed(2)}`);
-            // Draw chart with filtered data
-
-      drawChart(filtered);
+      if (totals.income <= 0 && totals.expenses > 0) {
+        $('#incomeNote')
+          .text('N.B: Please add income before recording expenses.')
+          .fadeIn();
+      } else {
+        $('#incomeNote').fadeOut();
+      }
     });
   }
 
-  // Draw Chart.js bar chart by category totals
+  function fetchExpenses(filterCategory = '') {
+  $.getJSON('../api/expenses_api.php?action=fetch', function (data) {
+    table.clear();
+
+    let filtered = filterCategory
+      ? data.filter(item => item.category === filterCategory)
+      : data;
+
+    filtered.forEach((row, i) => {
+      const amount = parseFloat(row.amount);
+      table.row.add([
+        i + 1,
+        row.title,
+        row.description || '-',
+        '$' + amount.toFixed(2),
+        row.date,
+        row.category,
+        `
+        <button class="btn btn-sm btn-warning edit-btn" data-id="${row.id}">Edit</button>
+        <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}">Delete</button>
+        `
+      ]);
+    });
+
+    table.draw();
+
+    // ✅ Recalculate totals from backend
+    $.getJSON('../api/expenses_api.php?action=totals', function (totals) {
+      const { income, expenses, balance } = totals;
+
+      $('#totalIncome').text(`$${income.toFixed(2)}`);
+      $('#totalExpenses').text(`$${expenses.toFixed(2)}`);
+      $('#currentBalance').text(`$${balance.toFixed(2)}`);
+
+      if (income <= 0 && expenses > 0) {
+        $('#incomeNote')
+          .text('N.B: Please add income before recording expenses.')
+          .fadeIn();
+      } else {
+        $('#incomeNote').fadeOut();
+      }
+    });
+
+    // ✅ Refresh chart only with filtered
+    drawChart(filtered);
+  });
+}
+
+
+  function loadTotals() {
+  $.getJSON('../api/expenses_api.php?action=totals', function (res) {
+    $('#totalIncome').text(`$${res.income.toFixed(2)}`);
+    $('#totalExpenses').text(`$${res.expenses.toFixed(2)}`);
+    $('#currentBalance').text(`$${res.balance.toFixed(2)}`);
+  });
+}
+  loadTotals();
+
+
   function drawChart(data) {
     const ctx = document.getElementById('expenseChart').getContext('2d');
-
     const totals = {};
+
     data.forEach(item => {
       totals[item.category] = (totals[item.category] || 0) + parseFloat(item.amount);
     });
@@ -96,45 +128,40 @@ $(document).ready(function () {
     });
   }
 
-  // Handle form submission for create/update
   $('#expenseForm').submit(function (e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const category = $('[name="category"]').val();
-  const amount = parseFloat($('[name="amount"]').val());
+    const category = $('[name="category"]').val();
+    const amount = parseFloat($('[name="amount"]').val());
+    const income = parseFloat($('#totalIncome').text().replace('$', ''));
+    const expenses = parseFloat($('#totalExpenses').text().replace('$', ''));
+    const currentBalance = income - expenses;
 
-  const income = parseFloat($('#totalIncome').text().replace('$', ''));
-  const expenses = parseFloat($('#totalExpenses').text().replace('$', ''));
-  const currentBalance = income - expenses;
-
-  // 🚫 Prevent expenses if no income
-  if (income === 0 && category !== 'Income') {
-    alert("You must first add an income before recording expenses.");
-    return;
-  }
-
-  // 🚫 Prevent if expense > current balance
-  if (category !== 'Income' && amount > currentBalance) {
-    alert("Insufficient balance. This expense exceeds your current income.");
-    return;
-  }
-
-  const formData = $(this).serialize();
-  const action = $('#expense_id').val() === '' ? 'create' : 'update';
-
-  $.post(`../api/expenses_api.php?action=${action}`, formData, function (res) {
-    if (res.status === 'success' || res.status === 'updated') {
-      $('#expenseModal').modal('hide');
-      $('#expenseForm')[0].reset();
-      fetchExpenses($('#filterCategory').val());
-    } else {
-      alert(res.message || 'Error saving expense');
+    if (income === 0 && category !== 'Income') {
+      Swal.fire({ icon: 'warning', title: 'No Income', text: 'You must first add income before recording expenses.' });
+      return;
     }
-  }, 'json');
-});
 
+    if (category !== 'Income' && amount > currentBalance) {
+      Swal.fire({ icon: 'error', title: 'Insufficient Balance', text: 'This expense exceeds your current income.' });
+      return;
+    }
 
-  // Edit button click
+    const formData = $(this).serialize();
+    const action = $('#expense_id').val() === '' ? 'create' : 'update';
+
+    $.post(`../api/expenses_api.php?action=${action}`, formData, function (res) {
+      if (res.status === 'success' || res.status === 'updated') {
+        $('#expenseModal').modal('hide');
+        $('#expenseForm')[0].reset();
+        fetchExpenses($('#filterCategory').val());
+        Swal.fire({ icon: 'success', title: 'Saved', text: 'Expense saved successfully!' });
+      } else {
+        Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'Error saving expense' });
+      }
+    }, 'json');
+  });
+
   $(document).on('click', '.edit-btn', function () {
     const id = $(this).data('id');
     $.getJSON(`../api/expenses_api.php?action=get&id=${id}`, function (data) {
@@ -148,85 +175,75 @@ $(document).ready(function () {
     });
   });
 
-  // Delete button click
   $(document).on('click', '.delete-btn', function () {
-    if (confirm("Delete this expense?")) {
-      const id = $(this).data('id');
-      $.post('../api/expenses_api.php?action=delete', { id }, function (res) {
-        if (res.status === 'deleted') {
-          fetchExpenses($('#filterCategory').val());
-        } else {
-          alert('Error deleting');
-        }
-      }, 'json');
-    }
+    const id = $(this).data('id');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This expense will be permanently deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.post('../api/expenses_api.php?action=delete', { id }, function (res) {
+          if (res.status === 'deleted') {
+            fetchExpenses($('#filterCategory').val());
+            Swal.fire('Deleted!', 'Expense deleted successfully.', 'success');
+          } else {
+            Swal.fire('Error', 'Failed to delete expense.', 'error');
+          }
+        }, 'json');
+      }
+    });
   });
 
-  // Category filter change
   $('#filterCategory').change(function () {
     const selected = $(this).val();
     fetchExpenses(selected);
   });
 
-  // Export to Excel using SheetJS
   $('#exportExcelBtn').click(function () {
-  const tableClone = $('#expenseTable').clone();
-  tableClone.find('th:last-child, td:last-child').remove(); // Remove "Actions"
+    const tableClone = $('#expenseTable').clone();
+    tableClone.find('th:last-child, td:last-child').remove();
 
-  const income = $('#totalIncome').text();
-  const expenses = $('#totalExpenses').text();
-  const balance = `$${(parseFloat(income.replace('$', '')) - parseFloat(expenses.replace('$', ''))).toFixed(2)}`;
+    const income = $('#totalIncome').text();
+    const expenses = $('#totalExpenses').text();
+    const balance = `$${(parseFloat(income.replace('$', '')) - parseFloat(expenses.replace('$', ''))).toFixed(2)}`;
 
-  tableClone.append(`
-    <tr><td colspan="3"><strong>Total Income:</strong></td><td colspan="3">${income}</td></tr>
-    <tr><td colspan="3"><strong>Total Expenses:</strong></td><td colspan="3">${expenses}</td></tr>
-    <tr><td colspan="3"><strong>Balance:</strong></td><td colspan="3">${balance}</td></tr>
-  `);
+    tableClone.append(`
+      <tr><td colspan="3"><strong>Total Income:</strong></td><td colspan="3">${income}</td></tr>
+      <tr><td colspan="3"><strong>Total Expenses:</strong></td><td colspan="3">${expenses}</td></tr>
+      <tr><td colspan="3"><strong>Balance:</strong></td><td colspan="3">${balance}</td></tr>
+    `);
 
-  const ws = XLSX.utils.table_to_sheet(tableClone[0]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Expenses');
-  XLSX.writeFile(wb, 'expenses.xlsx');
-});
+    const ws = XLSX.utils.table_to_sheet(tableClone[0]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Expenses');
+    XLSX.writeFile(wb, 'expenses.xlsx');
+  });
 
+  $('#exportPdfBtn').click(function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-  // Export to PDF using jsPDF + autoTable
- $('#exportPdfBtn').click(function () {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+    doc.text('Expense Report', 14, 15);
+    const tableEl = $('#expenseTable').clone();
+    tableEl.find('th:last-child, td:last-child').remove();
 
-  doc.text('Expense Report', 14, 15);
+    const income = $('#totalIncome').text();
+    const expenses = $('#totalExpenses').text();
+    const balance = `$${(parseFloat(income.replace('$', '')) - parseFloat(expenses.replace('$', ''))).toFixed(2)}`;
 
-  const tableEl = $('#expenseTable').clone(); // clone to remove actions
-  tableEl.find('th:last-child, td:last-child').remove(); // remove "Actions"
+    tableEl.find('tbody').append(`
+      <tr><td colspan="3"><strong>Total Income:</strong></td><td colspan="3">${income}</td></tr>
+      <tr><td colspan="3"><strong>Total Expenses:</strong></td><td colspan="3">${expenses}</td></tr>
+      <tr><td colspan="3"><strong>Balance:</strong></td><td colspan="3">${balance}</td></tr>
+    `);
 
-  const income = $('#totalIncome').text();
-  const expenses = $('#totalExpenses').text();
-  const balance = `$${(parseFloat(income.replace('$', '')) - parseFloat(expenses.replace('$', ''))).toFixed(2)}`;
+    doc.autoTable({ html: tableEl[0], startY: 25 });
+    doc.save('expenses.pdf');
+  });
 
-  const finalRow = `
-    <tr>
-      <td colspan="3"><strong>Total Income:</strong></td>
-      <td colspan="3">${income}</td>
-    </tr>
-    <tr>
-      <td colspan="3"><strong>Total Expenses:</strong></td>
-      <td colspan="3">${expenses}</td>
-    </tr>
-    <tr>
-      <td colspan="3"><strong>Balance:</strong></td>
-      <td colspan="3">${balance}</td>
-    </tr>
-  `;
-
-  tableEl.find('tbody').append(finalRow);
-
-  doc.autoTable({ html: tableEl[0], startY: 25 });
-  doc.save('expenses.pdf');
-});
-
-
-  // Initialize everything
   initializeDataTable();
   fetchExpenses();
 });

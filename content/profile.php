@@ -30,9 +30,13 @@
                                             
                                             <div class="hando-main-sections" id="user-profile-box">
                                             <div class="hando-profile-main">
-<img id="user-profile-image" src="../upload/profile/image.png" class="rounded-circle img-fluid avatar-xxl img-thumbnail float-start" alt="user-image" class="rounded-circle" />
-                                                <span class="sil-profile_main-pic-change img-thumbnail">
+                                                <img id="user-profile-image" src="../upload/profile/image.png" class="rounded-circle img-fluid avatar-xxl img-thumbnail float-start" alt="user-image" class="rounded-circle" />
+                                                <a href="#">
+                                                    <span class="sil-profile_main-pic-change img-thumbnail">
                                                 <i class="mdi mdi-camera text-white"></i>
+
+                                                </a>
+                                                
                                                 </span>
                                             </div>
 

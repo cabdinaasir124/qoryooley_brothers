@@ -51,8 +51,8 @@ $(document).ready(function () {
         row.parent_name,
         `
         <button class="btn btn-info btn-sm view-btn" data-id="${row.id}"><i class="fas fa-eye"></i></button>
-        <button class="btn btn-warning btn-sm edit-btn" data-id="${row.id}"><i class="fas fa-edit"></i></button>
-        <button class="btn btn-danger btn-sm delete-btn" data-id="${row.student_id}"><i class="fas fa-trash"></i></button>
+        <button class="btn btn-warning btn-sm edit-btns" data-id="${row.id}"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-danger btn-sm delete-btns" data-id="${row.id}"><i class="fas fa-trash"></i></button>
         `
       ]);
     });
@@ -131,37 +131,52 @@ $(document).ready(function () {
   });
 
   // View student details
-  $(document).on('click', '.view-btn', function () {
-    const id = $(this).data('id');
-    $.getJSON(`../api/student_api.php?action=get&id=${id}`, function (data) {
-      let tableRows = '';
+$(document).on('click', '.view-btn', function () {
+  const id = $(this).data('id');
+  $.getJSON(`../api/student_api.php?action=get&id=${id}`, function (data) {
+    let tableRows = '';
 
-      for (const key in data) {
-        if (key === 'student_image') continue;
-        const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        tableRows += `<tr><th class="text-start">${label}:</th><td>${data[key] || '-'}</td></tr>`;
+    // Map for department_type display
+    const deptMap = {
+      quranic: 'Quranic',
+      school: 'School',
+      both: 'Quranic & School'
+    };
+
+    for (const key in data) {
+      if (key === 'student_image') continue;
+
+      const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      let value = data[key] || '-';
+
+      // Replace department_type with friendly name
+      if (key === 'department_type' && value in deptMap) {
+        value = deptMap[value];
       }
 
-      const imageHTML = data.student_image
-        ? `<div class="text-center mb-3">
-            <img src="${data.student_image}" class="rounded shadow-sm" style="max-height: 150px;">
-          </div>`
-        : '';
+      tableRows += `<tr><th class="text-start">${label}:</th><td>${value}</td></tr>`;
+    }
 
-      $('#studentInfoTable').html(`
-        ${imageHTML}
-        <table class="table table-bordered">
-          <tbody>${tableRows}</tbody>
-        </table>
-      `);
+    const imageHTML = data.student_image
+      ? `<div class="text-center mb-3">
+          <img src="${data.student_image}" class="rounded shadow-sm" style="max-height: 150px;">
+        </div>`
+      : '';
 
-      $('#viewStudentModal').modal('show');
-    });
+    $('#studentInfoTable').html(`
+      ${imageHTML}
+      <table class="table table-bordered">
+        <tbody>${tableRows}</tbody>
+      </table>
+    `);
+
+    $('#viewStudentModal').modal('show');
   });
+});
 
-  // Delete student
-  $(document).on('click', '.delete-btn', function () {
-    const student_id = $(this).data('id');
+
+  $(document).on('click', '.delete-btns', function () {
+    const id = $(this).data('id'); // ✅ correct
 
     Swal.fire({
       title: 'Delete Student?',
@@ -173,7 +188,7 @@ $(document).ready(function () {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        $.post('../api/student_api.php?action=delete', { student_id }, function (res) {
+        $.post('../api/student_api.php?action=delete', { id }, function (res) {
           if (res.status === 'deleted') {
             Swal.fire('Deleted!', 'Student has been deleted.', 'success');
             fetchStudents();
@@ -187,22 +202,22 @@ $(document).ready(function () {
 
   // Edit student
   $(document).on('click', '.edit-btn', function () {
-    const id = $(this).data('id');
+    const id = $(this).data('id');   
 
     $.getJSON(`../api/student_api.php?action=get&id=${id}`, function (data) {
       $('#student_db_id').val(data.id);
-      $('#student_id').val(data.student_id);
+      $('#student_id2').val(data.student_id2);
       $('#full_name').val(data.full_name);
       $('#gender').val(data.gender);
       $('#dob').val(data.date_of_birth);
       $('#place_of_birth').val(data.place_of_birth);
-      $('#address').val(data.address);
+      // $('#address').val(data.address);
       $('#class_id').val(data.class_id);
       $('#academic_year_id').val(data.academic_year_id);
       $('#parent_id').val(data.parent_id);
       $('#status').val(data.status);
       $('#notes').val(data.notes);
-
+      $('#department_type').val(data.department_type);  
       $('#student_id').prop('readonly', true);
       $('#addStudentModal .modal-title').text('Edit Student');
       $('#addStudentModal button[type="submit"]').text('Update Student');
