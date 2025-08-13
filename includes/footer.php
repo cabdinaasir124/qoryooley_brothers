@@ -67,6 +67,8 @@
     <script src="../js/teacher.js"></script>
     <script src="../js/expenses.js"></script>
     <script src="../js/hifz.js"></script>
+    <script src="../js/halaqa-schedule.js"></script>
+    <script src="../js/tajweed.js"></script>
 
     <script>
         document.querySelector('.feather-menu').addEventListener('click', () => {

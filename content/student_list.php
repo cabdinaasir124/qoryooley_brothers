@@ -77,8 +77,8 @@ $academic_year_id = $_GET['academic_year_id'] ?? '';
               <input type="hidden" name="academic_year_id" id="academic_year_hidden" value="<?= $academic_year_id ?>">
               <input type="hidden" name="id" id="student_db_id">
 
-                <label for="student_id" class="form-label">Student ID</label>
-                <input type="text" id="student_id2" name="student_id2" class="form-control" readonly>
+                <!-- <label for="student_id" class="form-label">Student ID</label> -->
+<input type="text" id="student_id" name="student_id" class="form-control" readonly>
               </div>
 
               <div class="mb-2">

@@ -99,7 +99,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-              <input type="hidden" name="id" id="expense_id">
+              <input type="hidden" name="expense_id" id="expense_id">
 
               <div class="mb-2">
                 <label>Title</label>

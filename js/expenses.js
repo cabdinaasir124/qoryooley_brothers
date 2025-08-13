@@ -1,9 +1,9 @@
 // 📁 File: assets/js/expense_manager.js
-
 $(document).ready(function () {
   let table;
   let expenseChart;
 
+  // Initialize DataTable
   function initializeDataTable() {
     table = $('#expenseTable').DataTable({
       responsive: true,
@@ -21,81 +21,47 @@ $(document).ready(function () {
     });
   }
 
-  function updateTotals() {
-    $.getJSON('../api/expenses_api.php?action=totals', function (totals) {
-      $('#totalIncome').text(`$${totals.income.toFixed(2)}`);
-      $('#totalExpenses').text(`$${totals.expenses.toFixed(2)}`);
-      $('#currentBalance').text(`$${totals.balance.toFixed(2)}`);
-
-      if (totals.income <= 0 && totals.expenses > 0) {
-        $('#incomeNote')
-          .text('N.B: Please add income before recording expenses.')
-          .fadeIn();
-      } else {
-        $('#incomeNote').fadeOut();
-      }
+  // Load totals
+  function loadTotals() {
+    $.getJSON('../api/expenses_api.php?action=totals', function (res) {
+      $('#totalIncome').text(`$${res.income.toFixed(2)}`);
+      $('#totalExpenses').text(`$${res.expenses.toFixed(2)}`);
+      $('#currentBalance').text(`$${res.balance.toFixed(2)}`);
     });
   }
 
+  // Fetch expenses
   function fetchExpenses(filterCategory = '') {
-  $.getJSON('../api/expenses_api.php?action=fetch', function (data) {
-    table.clear();
+    $.getJSON('../api/expenses_api.php?action=fetch', function (data) {
+      table.clear();
 
-    let filtered = filterCategory
-      ? data.filter(item => item.category === filterCategory)
-      : data;
+      const filtered = filterCategory
+        ? data.filter(item => item.category === filterCategory)
+        : data;
 
-    filtered.forEach((row, i) => {
-      const amount = parseFloat(row.amount);
-      table.row.add([
-        i + 1,
-        row.title,
-        row.description || '-',
-        '$' + amount.toFixed(2),
-        row.date,
-        row.category,
-        `
-        <button class="btn btn-sm btn-warning edit-btn" data-id="${row.id}">Edit</button>
-        <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}">Delete</button>
-        `
-      ]);
+      filtered.forEach((row, i) => {
+        const amount = parseFloat(row.amount);
+        table.row.add([
+          i + 1,
+          row.title,
+          row.description || '-',
+          `$${amount.toFixed(2)}`,
+          row.date,
+          row.category,
+          `
+            <button class="btn btn-sm btn-warning expense-edit-btn" data-id="${row.expense_id}">Edit</button>
+            <button class="btn btn-sm btn-danger expense-delete-btn" data-id="${row.expense_id}">Delete</button>
+          `
+        ]);
+      });
+
+      table.draw();
+      loadTotals();
+      drawChart(filtered);
     });
+  }
 
-    table.draw();
-
-    // ✅ Recalculate totals from backend
-    $.getJSON('../api/expenses_api.php?action=totals', function (totals) {
-      const { income, expenses, balance } = totals;
-
-      $('#totalIncome').text(`$${income.toFixed(2)}`);
-      $('#totalExpenses').text(`$${expenses.toFixed(2)}`);
-      $('#currentBalance').text(`$${balance.toFixed(2)}`);
-
-      if (income <= 0 && expenses > 0) {
-        $('#incomeNote')
-          .text('N.B: Please add income before recording expenses.')
-          .fadeIn();
-      } else {
-        $('#incomeNote').fadeOut();
-      }
-    });
-
-    // ✅ Refresh chart only with filtered
-    drawChart(filtered);
-  });
-}
-
-
-  function loadTotals() {
-  $.getJSON('../api/expenses_api.php?action=totals', function (res) {
-    $('#totalIncome').text(`$${res.income.toFixed(2)}`);
-    $('#totalExpenses').text(`$${res.expenses.toFixed(2)}`);
-    $('#currentBalance').text(`$${res.balance.toFixed(2)}`);
-  });
-}
-  loadTotals();
-
-
+  // Draw category chart
   function drawChart(data) {
     const ctx = document.getElementById('expenseChart').getContext('2d');
     const totals = {};
@@ -112,7 +78,7 @@ $(document).ready(function () {
     expenseChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels,
         datasets: [{
           label: 'Amount by Category',
           data: values,
@@ -128,6 +94,7 @@ $(document).ready(function () {
     });
   }
 
+  // Handle form submission
   $('#expenseForm').submit(function (e) {
     e.preventDefault();
 
@@ -138,12 +105,12 @@ $(document).ready(function () {
     const currentBalance = income - expenses;
 
     if (income === 0 && category !== 'Income') {
-      Swal.fire({ icon: 'warning', title: 'No Income', text: 'You must first add income before recording expenses.' });
+      Swal.fire({ icon: 'warning', title: 'No Income', text: 'Add income before expenses.' });
       return;
     }
 
     if (category !== 'Income' && amount > currentBalance) {
-      Swal.fire({ icon: 'error', title: 'Insufficient Balance', text: 'This expense exceeds your current income.' });
+      Swal.fire({ icon: 'error', title: 'Insufficient Balance', text: 'Expense exceeds current balance.' });
       return;
     }
 
@@ -156,26 +123,31 @@ $(document).ready(function () {
         $('#expenseForm')[0].reset();
         fetchExpenses($('#filterCategory').val());
         Swal.fire({ icon: 'success', title: 'Saved', text: 'Expense saved successfully!' });
+      } else if (res.status === 'no_change') {
+        Swal.fire({ icon: 'info', title: 'No Changes', text: 'No changes were made.' });
       } else {
         Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'Error saving expense' });
       }
     }, 'json');
   });
 
-  $(document).on('click', '.edit-btn', function () {
-    const id = $(this).data('id');
-    $.getJSON(`../api/expenses_api.php?action=get&id=${id}`, function (data) {
-      $('#expense_id').val(data.id);
-      $('[name="title"]').val(data.title);
-      $('[name="category"]').val(data.category);
-      $('[name="amount"]').val(data.amount);
-      $('[name="date"]').val(data.date);
-      $('[name="description"]').val(data.description);
-      $('#expenseModal').modal('show');
-    });
+  // Edit expense
+$(document).on('click', '.expense-edit-btn', function () {
+  const id = $(this).data('id');
+  $.getJSON(`../api/expenses_api.php?action=get&id=${id}`, function (data) {
+    $('#expense_id').val(data.expense_id); // ✅ critical for update
+    $('[name="title"]').val(data.title);
+    $('[name="category"]').val(data.category);
+    $('[name="amount"]').val(data.amount);
+    $('[name="date"]').val(data.date);
+    $('[name="description"]').val(data.description);
+    $('#expenseModal').modal('show');
   });
+});
 
-  $(document).on('click', '.delete-btn', function () {
+
+  // Delete expense
+  $(document).on('click', '.expense-delete-btn', function () {
     const id = $(this).data('id');
     Swal.fire({
       title: 'Are you sure?',
@@ -197,53 +169,12 @@ $(document).ready(function () {
     });
   });
 
+  // Filter
   $('#filterCategory').change(function () {
-    const selected = $(this).val();
-    fetchExpenses(selected);
+    fetchExpenses($(this).val());
   });
 
-  $('#exportExcelBtn').click(function () {
-    const tableClone = $('#expenseTable').clone();
-    tableClone.find('th:last-child, td:last-child').remove();
-
-    const income = $('#totalIncome').text();
-    const expenses = $('#totalExpenses').text();
-    const balance = `$${(parseFloat(income.replace('$', '')) - parseFloat(expenses.replace('$', ''))).toFixed(2)}`;
-
-    tableClone.append(`
-      <tr><td colspan="3"><strong>Total Income:</strong></td><td colspan="3">${income}</td></tr>
-      <tr><td colspan="3"><strong>Total Expenses:</strong></td><td colspan="3">${expenses}</td></tr>
-      <tr><td colspan="3"><strong>Balance:</strong></td><td colspan="3">${balance}</td></tr>
-    `);
-
-    const ws = XLSX.utils.table_to_sheet(tableClone[0]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Expenses');
-    XLSX.writeFile(wb, 'expenses.xlsx');
-  });
-
-  $('#exportPdfBtn').click(function () {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.text('Expense Report', 14, 15);
-    const tableEl = $('#expenseTable').clone();
-    tableEl.find('th:last-child, td:last-child').remove();
-
-    const income = $('#totalIncome').text();
-    const expenses = $('#totalExpenses').text();
-    const balance = `$${(parseFloat(income.replace('$', '')) - parseFloat(expenses.replace('$', ''))).toFixed(2)}`;
-
-    tableEl.find('tbody').append(`
-      <tr><td colspan="3"><strong>Total Income:</strong></td><td colspan="3">${income}</td></tr>
-      <tr><td colspan="3"><strong>Total Expenses:</strong></td><td colspan="3">${expenses}</td></tr>
-      <tr><td colspan="3"><strong>Balance:</strong></td><td colspan="3">${balance}</td></tr>
-    `);
-
-    doc.autoTable({ html: tableEl[0], startY: 25 });
-    doc.save('expenses.pdf');
-  });
-
+  // Init
   initializeDataTable();
   fetchExpenses();
 });
