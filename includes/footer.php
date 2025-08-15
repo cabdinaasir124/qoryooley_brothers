@@ -69,6 +69,7 @@
     <script src="../js/hifz.js"></script>
     <script src="../js/halaqa-schedule.js"></script>
     <script src="../js/tajweed.js"></script>
+    <script src="../js/exam-schedule.js"></script>
 
     <script>
         document.querySelector('.feather-menu').addEventListener('click', () => {

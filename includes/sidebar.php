@@ -108,8 +108,8 @@
       <li><a href="../admin/teacher.php"> Teacher List</a></li>
       <li><a href="../admin/teacher-profile.php"> Teacher Profiles</a></li>
       <li><a href="../admin/teacher-attendance.php"> Teacher Attendance</a></li>
-      <li><a href="../admin/teacher-salary.php"> Teacher Salary</a></li>
-      <li><a href="../admin/teacher-payments.php"> Salary Payments</a></li>
+      <!-- <li><a href="../admin/teacher-salary.php"> Teacher Salary</a></li>
+      <li><a href="../admin/teacher-payments.php"> Salary Payments</a></li> -->
     </ul>
   </div>
 </li>
@@ -160,8 +160,10 @@
                     <div class="collapse" id="sidebarExams">
                         <ul class="nav-second-level">
                             <li><a href="../Admin/exam.php">Exam List</a></li>
+                            <li><a href="../Admin/exam-schedule.php">Exam schedule</a></li>
                             <!-- <li><a href="create-exam.html">Create Exam</a></li> -->
-                            <li><a href="exam-results.html">Exam Results</a></li>
+                            <li><a href="../Admin/exam-results.php">Exam Results</a></li>
+                            
                         </ul>
                     </div>
                 </li>
