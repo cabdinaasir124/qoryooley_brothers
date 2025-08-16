@@ -29,9 +29,18 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="tajweedTableBody"></tbody>
+        <tbody id="tajweedBody"></tbody>
       </table>
     </div>
+  </div>
+
+</div>
+
+
+
+<div class="modal fade" id="tajweedUpdateModal" tabindex="-1">
+  <div class="modal-dialog" id="TajweedUpdateModalBody">
+   
   </div>
 </div>
 

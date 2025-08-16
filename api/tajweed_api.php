@@ -23,9 +23,19 @@ if ($action === 'create') {
     $stmt->bind_param("ssss", $_POST['student_name'], $_POST['lesson'], $_POST['date'], $_POST['remarks']);
     $stmt->execute();
     response(['status' => 'success', 'message' => 'Record added successfully']);
-}
-
-if ($action === 'update') {
+}elseif($action === 'edit_tajweed') {
+    if (empty($_POST['id'])) response(['status' => 'error', 'message' => 'Invalid ID']);
+    $id = intval($_POST['id']);
+    $stmt = $conn->prepare("SELECT * FROM tajweed_records WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        response(['status' => 'success', 'row' => $row]);
+    } else {
+        response(['status' => 'error', 'message' => 'Record not found']);
+    }
+}elseif ($action === 'update') {
     if (empty($_POST['id'])) response(['status' => 'error', 'message' => 'Invalid ID']);
     $stmt = $conn->prepare("UPDATE tajweed_records SET student_name=?, lesson=?, date=?, remarks=? WHERE id=?");
     $stmt->bind_param("ssssi", $_POST['student_name'], $_POST['lesson'], $_POST['date'], $_POST['remarks'], $_POST['id']);
