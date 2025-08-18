@@ -65,9 +65,9 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Term</label>
                   <select class="form-select" name="term" required>
-                    <option value="Term 1">Term 1</option>
+                    <!-- <option value="Term 1">Term 1</option> -->
                     <option value="Mid-Term">Mid-Term</option>
-                    <option value="Term 2">Term 2</option>
+                    <!-- <option value="Term 2">Term 2</option> -->
                     <option value="Final">Final</option>
                   </select>
                 </div>

@@ -158,14 +158,17 @@
                         <i data-feather="file-text"></i> <span> Exams </span> <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="sidebarExams">
-                        <ul class="nav-second-level">
-                            <li><a href="../Admin/exam.php">Exam List</a></li>
-                            <li><a href="../Admin/exam-schedule.php">Exam schedule</a></li>
-                            <!-- <li><a href="create-exam.html">Create Exam</a></li> -->
-                            <li><a href="../Admin/exam-results.php">Exam Results</a></li>
-                            
-                        </ul>
-                    </div>
+    <ul class="nav-second-level">
+        <li><a href="../Admin/exam.php">Exam List</a></li>
+        <li><a href="../Admin/exam-schedule.php">Exam Schedule</a></li>
+         <li><a href="../Admin/exam_subjects.php">Exam subjects</a></li>
+        <!-- <li><a href="create-exam.html">Create Exam</a></li> -->
+        <li><a href="../Admin/exam-results.php">Exam Result Entry</a></li>
+        <!-- <li><a href="../Admin/exam-results-entry.php">Exam Results entry</a></li> -->
+        <li><a href="../Admin/exam-result-view.php">Result View</a></li>
+    </ul>
+</div>
+
                 </li>
 
                 <!-- ================================= -->

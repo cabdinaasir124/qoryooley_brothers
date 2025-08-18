@@ -432,7 +432,7 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
 
     <!-- School Categories & Statistics -->
     <!-- School Categories & Statistics -->
-<div class="col-md-6 col-xl-4">
+<!-- <div class="col-md-6 col-xl-4">
     <div class="card">
         <div class="card-header">
             <div class="d-flex align-items-center">
@@ -496,24 +496,47 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
 
         </div>
     </div>
-</div>
+</div> -->
 
 
-    <!-- School Budget -->
-    <div class="col-md-9 col-xl-8">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0">Monthly Budget</h5>
-                </div>
+    <!-- School Budget Full Width -->
+<div class="col-lg-8"> <!-- full width -->
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h5 class="card-title mb-0">Monthly Budget</h5>
             </div>
-            <div class="card-body">
-
-          <canvas id="expenseChart" height="200"></canvas>
         </div>
-      </div>           
+        <div class="card-body">
+            <canvas id="expenseChart" height="200"></canvas>
         </div>
     </div>
+</div>
+
+<div class="col-lg-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h5 class="card-title
+    mb-0">Attendance Overview</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="mb-0">Today's Attendance</h6>
+                <span class="badge bg-success"><?= $attendance_percentage ?>%</span>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: <?= $attendance_percentage ?>%" aria-valuenow="<?= $attendance_percentage ?>" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+</div>
+    </div>
+
+
+    
+
+
 
     <!-- Task Overview -->
     <div class="col-xxl-3">

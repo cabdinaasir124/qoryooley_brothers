@@ -70,6 +70,10 @@
     <script src="../js/halaqa-schedule.js"></script>
     <script src="../js/tajweed.js"></script>
     <script src="../js/exam-schedule.js"></script>
+    <script src="../js/exam-results.js"></script>
+    <script src="../js/exam-results-entry.js"></script>
+    <script src="../js/exam-result-view.js"></script>
+    <script src="../js/exam_subjects.js"></script>
 
     <script>
         document.querySelector('.feather-menu').addEventListener('click', () => {
