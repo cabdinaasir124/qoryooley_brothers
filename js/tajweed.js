@@ -53,6 +53,7 @@ $(document).ready(function () {
              Toastify({ text: res.message, backgroundColor: "green", duration: 3000 }).showToast();
 
                 $("#tajweedModal").modal("hide");
+                $("#tajweedForm")[0].reset();
                 fetchRecords();
             }
         });
@@ -129,7 +130,9 @@ $(document).on("submit", "#tajweedUpdateForm", function (e) {
             if (response.status === "success") {
                 Toastify({ text: response.message, backgroundColor: "green", duration: 3000 }).showToast();
                 $("#tajweedUpdateModal").modal("hide");
+                $("#tajweedUpdateForm")[0].reset();
                 fetchRecords();
+
             } else {
                 alert(response.message);
             }
