@@ -4,20 +4,23 @@
   <meta charset="UTF-8">
   <title>User Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
 </head>
 <body>
 <div class="content-page">
   <div class="content">
-<div class="container-fluid mt-4">
+    <div class="container-fluid">
+<div class="container mt-4">
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h5 class="mb-0">User List</h5>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
         <i class="fas fa-user-plus"></i>&nbsp;Add New User
       </button>
     </div>
 
-    <div class="card-body">
+    <div class="card-body table-responsive">
       <table id="userTable" class="table table-bordered table-striped w-100">
         <thead>
           <tr>
@@ -32,83 +35,91 @@
             <th>Delete</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Example static data row -->
-          <!-- Replace this block with dynamic data (PHP/JS) -->
-          <tr>
-            <td>1</td>
-            <td>admin</td>
-            <td>admin@example.com</td>
-            <td>Admin</td>
-            <td><span class="badge bg-success">Active</span></td>
-            <td>2025-07-22</td>
-            <td><button class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button></td>
-            <td><button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button></td>
-            <td><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
-          </tr>
-        </tbody>
       </table>
     </div>
   </div>
 </div>
-
-<!-- Modal: Add New User -->
-<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+</div>
+  </div>
+</div>
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
-      <form id="userForm">
-        <div class="modal-header">
-          <h5 class="modal-title" id="userModalLabel">Register New User</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
+      <form id="addUserForm">
+        <div class="modal-header"><h5>Add New User</h5></div>
         <div class="modal-body row g-3">
-          <div class="col-md-6">
-            <label class="form-label">Username</label>
-            <input type="text" class="form-control" name="username">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Password</label>
-<input type="password" class="form-control" name="password" autocomplete="new-password">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Role</label>
-            <select class="form-select" name="role">
-              <option value="">Select Role</option>
+          <div class="col-md-6"><input type="text" name="username" class="form-control" placeholder="Username" required></div>
+          <div class="col-md-6"><input type="email" name="email" class="form-control" placeholder="Email" required></div>
+          <div class="col-md-6"><input type="password" name="password" class="form-control" placeholder="Password" required></div>
+          <div class="col-md-3">
+            <select name="role" class="form-control" required>
               <option value="Admin">Admin</option>
               <option value="Teacher">Teacher</option>
-              <option value="Student">Student</option>
             </select>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Status</label>
-            <select class="form-select" name="status">
+          <div class="col-md-3">
+            <select name="status" class="form-control" required>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Save User</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        </div>
+        <div class="modal-footer"><button type="submit" class="btn btn-success">Save</button></div>
       </form>
     </div>
   </div>
 </div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <form id="editUserForm">
+        <div class="modal-header"><h5>Edit User</h5></div>
+        <div class="modal-body row g-3">
+          <input type="hidden" name="id">
+          <div class="col-md-6"><input type="text" name="username" class="form-control" placeholder="Username" required></div>
+          <div class="col-md-6"><input type="email" name="email" class="form-control" placeholder="Email" required></div>
+          <div class="col-md-6"><input type="password" name="password" class="form-control" placeholder="Leave blank to keep"></div>
+          <div class="col-md-3">
+            <select name="role" class="form-control" required>
+              <option value="Admin">Admin</option>
+              <option value="Teacher">Teacher</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select name="status" class="form-control" required>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer"><button type="submit" class="btn btn-warning">Update</button></div>
+      </form>
+    </div>
   </div>
 </div>
 
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5>User Details</h5></div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item"><b>ID:</b> <span id="v-id"></span></li>
+          <li class="list-group-item"><b>Username:</b> <span id="v-username"></span></li>
+          <li class="list-group-item"><b>Email:</b> <span id="v-email"></span></li>
+          <li class="list-group-item"><b>Role:</b> <span id="v-role"></span></li>
+          <li class="list-group-item"><b>Status:</b> <span id="v-status"></span></li>
+          <li class="list-group-item"><b>Created At:</b> <span id="v-created"></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-<script>
-  $(document).ready(function () {
-    $('#userTable').DataTable();
-  });
-</script>
 
 </body>
 </html>

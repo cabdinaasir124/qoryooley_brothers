@@ -109,7 +109,7 @@
 
               <!-- Students Table -->
               <div class="table-responsive">
-                <table id="resultsTable" class="table table-bordered table-striped table-hover">
+                <table id="resultsEntryTable" class="table table-bordered table-striped table-hover">
                   <thead class="table-primary">
                     <tr>
                       <th>#</th>

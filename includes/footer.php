@@ -82,6 +82,56 @@
 
     </script>
 
+    <script>
+$(document).ready(function() {
+    $('#attendanceTable').DataTable({
+        pageLength: 10,
+        responsive: true,
+        order: [[1, 'asc']]
+    });
+});
+</script>
+
+<!-- Vendor -->
+        <!-- <script src="assets/libs/jquery/jquery.min.js"></script> -->
+        <!-- <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+        <script src="../assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="../assets/libs/node-waves/waves.min.js"></script>
+        <script src="../assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="../assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+        <script src="../assets/libs/feather-icons/feather.min.js"></script>
+
+        <!-- Apexcharts JS -->
+        <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <!-- for basic area chart -->
+        <script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
+
+        <!-- Widgets Init Js -->
+        <script src="../assets/js/pages/analytics-dashboard.init.js"></script>
+
+
+<script>
+$(document).ready(function() {
+    $('#teacherAttendanceTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        order: [[0, 'asc']]
+    });
+});
+</script>
+
+
+<script>
+$(document).ready(function() {
+    $('#monthlyAttendanceTable').DataTable({
+        pageLength: 20,
+        responsive: true,
+        order: [[0,'asc']]
+    });
+});
+</script>
+
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -142,6 +192,41 @@
       }
     }
   });
+</script>
+
+<!-- summary -->
+<script>
+const dailyLabels = <?= $dailyLabels ?>;
+const presentData = <?= $presentData ?>;
+const absentData = <?= $absentData ?>;
+
+// Chart.js
+new Chart(document.getElementById('attendanceChart'), {
+    type: 'bar',
+    data: {
+        labels: dailyLabels,
+        datasets: [
+            { label: 'Present', data: presentData, backgroundColor: 'rgba(40, 167, 69, 0.7)' },
+            { label: 'Absent',  data: absentData, backgroundColor: 'rgba(220, 53, 69, 0.7)' }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+// Top absentees table
+const topAbsenteesData = <?= json_encode($topAbsentees) ?>;
+const tbody = document.getElementById('topAbsentees');
+tbody.innerHTML = topAbsenteesData.map(s => `
+    <tr>
+      <td>${s.name}</td>
+      <td>${s.absent}</td>
+      <td>${(s.present / (s.present + s.absent) * 100).toFixed(2)}%</td>
+    </tr>
+`).join('');
 </script>
 
 
@@ -264,7 +349,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col fs-13 text-muted text-center">
-                            &copy; <script>document.write(new Date().getFullYear())</script> - Made with <span class="mdi mdi-heart text-danger"></span> by <a href="#!" class="text-reset fw-semibold">Eng Abdinaasir mohamed and Eng Ali ibraahim</a> 
+                            &copy; <script>document.write(new Date().getFullYear())</script> - Made with <span class="mdi mdi-heart text-danger"></span> by <a href="#!" class="text-reset fw-semibold">ENG ABDINAASIR MOHAMED YUUSUF</a> 
                         </div>
                     </div>
                 </div>
@@ -278,7 +363,6 @@
 <!-- jQuery (already included for DataTables) -->
 <!-- Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     </body>
 
 </html>

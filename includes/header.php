@@ -82,7 +82,7 @@ $profileLink = '#'; // default fallback
 if ($role === 'admin') {
     $profileLink = '../Admin/profile.php';
 } elseif ($role === 'teacher') {
-    $profileLink = '../teachers/profile.php'; // adjust this path to your student profile page
+    $profileLink = '../Admin/profile.php'; // adjust this path to your student profile page
 }
 ?>
 
@@ -95,14 +95,14 @@ if ($role === 'admin') {
     <head>
 
         <meta charset="utf-8" />
-        <title>Dashboard | Hando - Responsive Admin Dashboard Template</title>
+        <title>UNITED | QORYOOLY - BROTHERS AND SISTERS</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc."/>
         <meta name="author" content="Zoyothemes"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
         <!-- App favicon -->
-        <link rel="shortcut icon" href="../assets/images/favicon.ico">
+        <link rel="shortcut icon" href="../assets/images/logo.jpg">
 
         <!-- App css -->
         <link href="../assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
@@ -297,7 +297,7 @@ if ($role === 'admin') {
                             </a>
 
 
-                            <a href="auth-lock-screen.php" class="dropdown-item notify-item">
+                            <a href="../Auth/lock_screen.php" class="dropdown-item notify-item">
                                 <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
                                 <span>Lock Screen</span>
                             </a>

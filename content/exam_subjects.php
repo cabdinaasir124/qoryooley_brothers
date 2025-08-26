@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Exam Subjects</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 <body class="p-4">
   <div class="content-page">
@@ -58,12 +57,8 @@
                 <label class="form-label">Exam</label>
                 <select name="exam_id" id="exam_id" class="form-select" required>
                   <option value="">-- Select Exam --</option>
-                  <?php
-                  /**
-                   * Waxaan halkan ka soo qaadanay exams, annagoo LEFT JOIN ugu daray exam_schedule
-                   * si aan u helno exam_type (haddii uu jiro). Value = exams.id (exam_id la kaydinayo).
-                   */
-                  $exams = $conn->query("
+                 <?php
+$exams = $conn->query("
     SELECT e.id AS exam_id, e.title, GROUP_CONCAT(sch.exam_type SEPARATOR ', ') AS exam_type
     FROM exams e
     LEFT JOIN exam_schedule sch ON sch.exam_id = e.id
@@ -73,13 +68,16 @@
 
 if ($exams) {
     while($e = $exams->fetch_assoc()){
-        $label = htmlspecialchars(($e['exam_type'] ?? 'No Type').' - '.$e['title']);
+        // if exam_type exists, append it, otherwise just show the title
+        $label = $e['exam_type'] 
+            ? htmlspecialchars($e['title'].' - '.$e['exam_type']) 
+            : htmlspecialchars($e['title']);
+        
         echo "<option value='{$e['exam_id']}'>{$label}</option>";
     }
 }
+?>
 
-
-                  ?>
                 </select>
               </div>
 
@@ -174,7 +172,6 @@ if ($exams) {
     </div>
   </div>
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/exam_subjects.js"></script> -->
+ 
 </body>
 </html>

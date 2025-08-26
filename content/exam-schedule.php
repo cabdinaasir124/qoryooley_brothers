@@ -24,9 +24,7 @@ $subjects = $conn->query("SELECT id, subject_name FROM subjects ORDER BY subject
 
                 <select id="filter_exam_type" class="form-select d-inline-block" style="width:auto;">
                   <option value="">All Exam Types</option>
-                  <option value="Term-1">Term 1</option>
                   <option value="Mid-Term">Mid-Term</option>
-                  <option value="Term-2">Term 2</option>
                   <option value="Final">Final</option>
                 </select>
 
@@ -104,9 +102,7 @@ $subjects = $conn->query("SELECT id, subject_name FROM subjects ORDER BY subject
                   <label class="form-label">Exam Type</label>
                   <select class="form-select" id="exam_type" name="exam_type" required>
                     <option value="">Select Type</option>
-                    <option value="Term-1">Term 1</option>
                     <option value="Mid-Term">Mid-Term</option>
-                    <option value="Term-2">Term 2</option>
                     <option value="Final">Final</option>
                   </select>
                 </div>

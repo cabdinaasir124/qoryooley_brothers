@@ -76,6 +76,7 @@ $att_result = $conn->query("SELECT
 $att_data = $att_result->fetch_assoc();
 $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] / $att_data['total']) * 100, 1) : 0;
 
+
 ?>
 
 <style>
@@ -312,7 +313,7 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
 <!-- Dashboard Section: Student Enrollment Chart + Tasks -->
 <div class="row">
   <!-- Student Enrollment Overview -->
-  <div class="col-lg-8">
+  <div class="col-12">
     <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">Student Enrollment Overview</h5>
@@ -324,7 +325,7 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
   </div>
 
   <!-- Upcoming Events & Tasks -->
-  <div class="col-lg-4">
+  <!-- <div class="col-lg-4">
     <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">Upcoming Events & Tasks</h5>
@@ -333,7 +334,7 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
         <ul class="list-unstyled task-list-tab mb-0" id="taskList"></ul>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <!-- Start Projects Summary -->
@@ -514,11 +515,11 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
 </div>
 
 <div class="col-lg-4">
-    <div class="card">
+    <!-- Attendance Card -->
+    <div class="card mb-3">
         <div class="card-header">
             <div class="d-flex align-items-center">
-                <h5 class="card-title
-    mb-0">Attendance Overview</h5>
+                <h5 class="card-title mb-0">Attendance Overview</h5>
             </div>
         </div>
         <div class="card-body">
@@ -530,102 +531,151 @@ $attendance_percentage = ($att_data['total'] > 0) ? round(($att_data['present'] 
                 <div class="progress-bar bg-success" role="progressbar" style="width: <?= $attendance_percentage ?>%" aria-valuenow="<?= $attendance_percentage ?>" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>
-</div>
     </div>
+
+    <!-- Top Students Card -->
+    <div class="card">
+        <div class="card-header">
+            🎓 Top Students Exam (by Class)
+        </div>
+        <div class="card-body">
+            <?php
+            require '../config/conn.php';
+
+            $sql = "
+                SELECT *
+                FROM (
+                    SELECT 
+                        s.id AS student_id,
+                        s.full_name,
+                        c.class_name,
+                        SUM(er.marks_obtained) AS total_marks,
+                        ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY SUM(er.marks_obtained) DESC) AS rank_position
+                    FROM exam_results er
+                    JOIN students s ON er.student_id = s.id
+                    JOIN classes c ON s.class_id = c.id
+                    GROUP BY s.id, s.full_name, c.class_name, c.id
+                ) ranked
+                WHERE rank_position <= 3
+            ";
+
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                echo "<ul class='list-group'>";
+                while ($row = $result->fetch_assoc()) {
+                    echo "<li class='list-group-item d-flex justify-content-between align-items-center'>";
+                    echo "<div>
+                            <strong>{$row['full_name']}</strong><br>
+                            <small>{$row['class_name']} (Rank {$row['rank_position']})</small>
+                          </div>";
+                    echo "<span class='badge bg-success rounded-pill'>{$row['total_marks']} pts</span>";
+                    echo "</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "<p class='text-muted'>No exam results found.</p>";
+            }
+            ?>
+        </div>
+    </div>
+</div>
+
+
 
 
     
 
 
 
-    <!-- Task Overview -->
     <div class="col-xxl-3">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0">Task Overview</h5>
-                </div>
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush list-group-no-gutters">
-
-                    <!-- Example Tasks -->
-                    <li class="list-group-item px-0 pt-0">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="flex-shrink-0">
-                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                    📚
-                                </span>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-dark fs-15">Book Purchase</h6>
-                                <p class="fs-13 text-muted mb-0">Library & Qur’an books</p>
-                            </div>
-                            <div class="ms-auto text-end">
-                                <span class="h6 mb-0 fw-semibold text-danger">-$220</span>
-                                <span class="d-block text-muted fs-13">July 10, 2024</span>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-group-item px-0">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="flex-shrink-0">
-                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                    👨‍🏫
-                                </span>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-dark fs-15">Teacher Salary</h6>
-                                <p class="fs-13 text-muted mb-0">Monthly payout</p>
-                            </div>
-                            <div class="ms-auto text-end">
-                                <span class="h6 mb-0 fw-semibold text-danger">-$1,250</span>
-                                <span class="d-block text-muted fs-13">July 1, 2024</span>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-group-item px-0">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="flex-shrink-0">
-                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                    💰
-                                </span>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-dark fs-15">Student Fees</h6>
-                                <p class="fs-13 text-muted mb-0">Income</p>
-                            </div>
-                            <div class="ms-auto text-end">
-                                <span class="h6 mb-0 fw-semibold text-success">+$3,600</span>
-                                <span class="d-block text-muted fs-13">July 5, 2024</span>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-group-item px-0 pb-0">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="flex-shrink-0">
-                                <span class="avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center">
-                                    🧾
-                                </span>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-dark fs-15">Maintenance</h6>
-                                <p class="fs-13 text-muted mb-0">Repairs & utilities</p>
-                            </div>
-                            <div class="ms-auto text-end">
-                                <span class="h6 mb-0 fw-semibold text-danger">-$480</span>
-                                <span class="d-block text-muted fs-13">July 6, 2024</span>
-                            </div>
-                        </div>
-                    </li>
-
-                </ul>
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h5 class="card-title mb-0">Task Overview</h5>
             </div>
         </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush list-group-no-gutters">
+                <?php
+                require '../config/conn.php';
+
+                // Apply filter from dropdown (if selected)
+                $filter = isset($_GET['category']) ? $_GET['category'] : '';
+
+                $sql = "SELECT expense_id, title, description, amount, date, category 
+                        FROM expenses";
+                if ($filter != '') {
+                    $sql .= " WHERE category = '".$conn->real_escape_string($filter)."'";
+                }
+                $sql .= " ORDER BY date DESC LIMIT 5";
+
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        // Format amount
+                        $amount = number_format($row['amount'], 2);
+
+                        // If category is "Income", mark as positive, else negative
+                        if (strtolower($row['category']) === 'income') {
+                            $amountClass = 'text-success';
+                            $amountSign  = '+';
+                        } else {
+                            $amountClass = 'text-danger';
+                            $amountSign  = '-';
+                        }
+
+                        // Icon (based on category)
+                        switch (strtolower($row['category'])) {
+                            case 'income':
+                                $icon = "💰";
+                                break;
+                            case 'food':
+                                $icon = "🍔";
+                                break;
+                            case 'transport':
+                                $icon = "🚌";
+                                break;
+                            case 'utilities':
+                                $icon = "💡";
+                                break;
+                            case 'other':
+                                $icon = "📌";
+                                break;
+                            default:
+                                $icon = "🧾"; // fallback
+                        }
+
+                        echo "
+                        <li class='list-group-item px-0'>
+                            <div class='d-flex align-items-center gap-3'>
+                                <div class='flex-shrink-0'>
+                                    <span class='avatar rounded-3 avatar-sm bg-light d-flex align-items-center justify-content-center'>
+                                        {$icon}
+                                    </span>
+                                </div>
+                                <div>
+                                    <h6 class='mb-1 text-dark fs-15'>{$row['title']}</h6>
+                                    <p class='fs-13 text-muted mb-0'>{$row['description']}</p>
+                                </div>
+                                <div class='ms-auto text-end'>
+                                    <span class='h6 mb-0 fw-semibold {$amountClass}'>{$amountSign}\${$amount}</span>
+                                    <span class='d-block text-muted fs-13'>".date('M d, Y', strtotime($row['date']))."</span>
+                                </div>
+                            </div>
+                        </li>";
+                    }
+                } else {
+                    echo "<li class='list-group-item text-muted'>No expenses found</li>";
+                }
+                ?>
+            </ul>
+        </div>
     </div>
+</div>
+
+
 
 </div>
 <!-- End School and Qur'an System Overview -->

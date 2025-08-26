@@ -52,8 +52,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } elseif (password_verify($password, $user["password"])) {
             $_SESSION["user_id"] = $user["id"];
             $_SESSION["username"] = $user["username"];
+            $_SESSION['email'] = $user['email'];
             $_SESSION["profile_image"] = $user["profile_image"];
             $_SESSION["role"] = strtolower($user["role"]);
+
+              $user_id = $_SESSION['user_id'];
+
+// Join user_permissions with permissions table to get slugs
+$sql = "SELECT p.slug 
+        FROM user_permissions up
+        JOIN permissions p ON up.permission_id = p.id
+        WHERE up.user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$perms = [];
+while ($row = $result->fetch_assoc()) {
+    $perms[] = $row['slug'];
+}
+
+$_SESSION['permissions'] = $perms;
+
 
             if ($remember) {
                 setcookie("remember_user", $user["id"], time() + (86400 * 30), "/");
@@ -96,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <title>Login | Qoryooley Brothers and Sisters School</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Login portal for Qoryooley Brothers and Sisters School" />
-  <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+  <link rel="shortcut icon" href="../assets/images/logo.jpg" />
 
   <!-- Bootstrap & Google Fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -241,7 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <input class="form-check-input" type="checkbox" id="remember" name="remember" />
       <label class="form-check-label" for="remember">Remember me</label>
     </div>
-    <a href="#" class="text-decoration-none text-primary">Forgot password?</a>
+    <a href="../Auth/forget_password.php" class="text-decoration-none text-primary">Forgot password?</a>
   </div>
   <button type="submit" class="btn btn-primary w-100">Log In</button>
 </form>

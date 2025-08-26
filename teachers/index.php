@@ -1,6 +1,6 @@
 <?php
 include("../includes/header.php");
-include("../includes/dashboard_student.php");
-include("../includes/sidebar_student.php");
+include("../includes/student_dashboard.php");
+include("../includes/sidebar.php");
 include("../includes/footer.php");
 ?>

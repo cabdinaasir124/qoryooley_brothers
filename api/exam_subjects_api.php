@@ -17,7 +17,7 @@ switch ($action) {
               es.exam_date,
               es.max_marks,
               e.title AS exam_title,
-              COALESCE(sch.exam_type, 'N/A') AS exam_type,
+              -- COALESCE(sch.exam_type, 'N/A') AS exam_type,
               s.subject_name,
               t.full_name,
               c.class_name,

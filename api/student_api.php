@@ -102,7 +102,7 @@ if ($action === 'create' || $action === 'update') {
         WHERE id=?
     ");
     $stmt->bind_param(
-        "ssssssiiisssi", 
+        "sssssiiisssi", 
         $full_name, 
         $gender, 
         $department_type, 

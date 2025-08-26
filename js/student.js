@@ -201,7 +201,7 @@ $(document).on('click', '.view-btn', function () {
   });
 
   // Edit student
-  $(document).on('click', '.edit-btn', function () {
+  $(document).on('click', '.edit-btns', function () {
     const id = $(this).data('id');   
 
     $.getJSON(`../api/student_api.php?action=get&id=${id}`, function (data) {
