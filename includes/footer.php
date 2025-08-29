@@ -74,6 +74,7 @@
     <script src="../js/exam-results-entry.js"></script>
     <script src="../js/exam-result-view.js"></script>
     <script src="../js/exam_subjects.js"></script>
+    <script src="../js/t_dashboard.js"></script>
 
     <script>
         document.querySelector('.feather-menu').addEventListener('click', () => {
